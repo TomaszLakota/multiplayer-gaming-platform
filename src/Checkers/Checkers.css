@@ -1,0 +1,81 @@
+.board_container {
+  width: 480px;
+  margin: 20px auto 20px auto;
+}
+.board_row {
+  height: 60px;
+}
+.board_row:nth-child(odd) .cell:nth-child(odd) {
+  background-color: #efdc8f;
+}
+.board_row:nth-child(odd) .cell:nth-child(even) {
+  background-color: #774c1c;
+}
+.board_row:nth-child(even) .cell:nth-child(even) {
+  background-color: #efdc8f;
+}
+.board_row:nth-child(even) .cell:nth-child(odd) {
+  background-color: #774c1c;
+}
+.cell {
+  height: 60px;
+  width: 60px;
+  display: inline-block;
+}
+.cell .gamePiece {
+  width: 50px;
+  height: 50px;
+  margin: 5px 0 0 5px;
+  border-radius: 50px;
+  cursor: pointer;
+  position: relative;
+}
+.cell .gamePiece:after {
+  content: " ";
+  position: absolute;
+  right: 1px;
+  top: -6px;
+  height: 48px;
+  width: 48px;
+  border-radius: 50px;
+  pointer-events: none;
+}
+.cell.cell-b .gamePiece {
+  background-color: #3a341b;
+}
+.cell.cell-b.k .gamePiece:after {
+  background-color: #3a341b;
+  border: 1px solid white;
+}
+.cell.cell-r .gamePiece {
+  background-color: #d44d4d;
+}
+.cell.cell-r.k .gamePiece:after {
+  background-color: #d44d4d;
+  border: 1px solid white;
+}
+.cell.cell-ab .gamePiece,
+.cell.cell-ar .gamePiece {
+  background-color: #6a6aff;
+  box-shadow: 0px 0px 24px #2983f3;
+}
+.cell.cell-ab.k .gamePiece:after,
+.cell.cell-ar.k .gamePiece:after {
+  background-color: #6a6aff;
+  border: 1px solid white;
+}
+.cell.cell-h {
+  background-color: #6a6aff !important;
+}
+.cell.m .gamePiece {
+  background-color: green;
+}
+.board {
+  float: left;
+  transition-duration: 0.8s;
+  transition-property: transform;
+}
+.board_black {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
