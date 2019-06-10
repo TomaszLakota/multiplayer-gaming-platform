@@ -2,7 +2,8 @@ import React, { Component } from "react";
 
 export default class Chat extends Component {
    state = {
-      messages: []
+      messages: [],
+      message: ""
    };
    ws;
 
@@ -30,6 +31,20 @@ export default class Chat extends Component {
       };
    }
 
+   handleSend = () => {
+      if (this.ws.readyState !== WebSocket.OPEN) {
+         console.log("ws not ready");
+         return 0;
+      }
+      var json = JSON.stringify({
+         gameId: this.state.gameId,
+         userId: this.state.userId,
+         message: this.state.message
+      });
+      console.log("ws.send(): " + json);
+      this.ws.send(json);
+   };
+
    render() {
       return (
          <div className="GUI_chat row">
@@ -46,11 +61,18 @@ export default class Chat extends Component {
                   ))}
                </div>
                <div>
-                  <input />
-                  <button>Wyślij</button>
+                  <input id="message" onChange={this.handleInput} />
+                  <button onClick={this.handleSend}>Wyślij</button>
                </div>
             </div>
          </div>
       );
    }
+
+   handleInput = e => {
+      this.setState({
+         [e.target.id]: e.target.value
+      });
+      console.log(this.state);
+   };
 }

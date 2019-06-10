@@ -1,17 +1,14 @@
 /* eslint-disable no-unused-vars */
 import React, { Component } from "react";
 import "./App.css";
-import GameSelectionPage from "./GameSelectionPage";
 import LoginPage from "./LoginPage";
 import RegistrationPage from "./SignUpPage";
 import MainPage from "./MainPage";
 import CheckersLobbyPage from "./LobbyPage";
-import RoomInfoBar from "./LobbyRoomInfoBar";
 import CheckersRoomPage from "./Checkers/CheckersRoomPage";
 import LeaderboardPage from "./LeaderboardPage";
 import ProfilePage from "./ProfilePage";
 import { BrowserRouter as Router } from "react-router-dom";
-
 import { Route } from "react-router-dom";
 
 class App extends Component {

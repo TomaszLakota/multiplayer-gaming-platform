@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import Navbar from "./Navbar";
-import GameSelectionPage from "./GameSelectionPage";
+import GameSelection from "./GameSelection";
 
 class MainPage extends Component {
-  state = {};
-  render() {
-    return (
-      <React.Fragment>
-        <Navbar />
-        <div className="row justify-content-center">
-          <div className="col-4">
+   state = {};
+   render() {
+      return (
+         <React.Fragment>
+            <Navbar />
             <div className="row justify-content-center">
-              <GameSelectionPage />
+               <div className="col-4">
+                  <div className="row justify-content-center">
+                     <GameSelection />
+                  </div>
+               </div>
             </div>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
+         </React.Fragment>
+      );
+   }
 }
 
 export default MainPage;
