@@ -22,12 +22,15 @@ export default class Chat extends Component {
    initSocket() {
       this.ws.onmessage = event => {
          console.log("chat new ws message");
-         this.setState({
-            messages: this.state.messages.push({
-               username: event.data.username,
-               message: event.data.message
-            })
-         });
+
+         if (event.data.type === "chat-message") {
+            this.setState({
+               messages: this.state.messages.push({
+                  username: event.data.username,
+                  message: event.data.message
+               })
+            });
+         }
       };
    }
 
@@ -39,6 +42,7 @@ export default class Chat extends Component {
       var json = JSON.stringify({
          gameId: this.state.gameId,
          userId: this.state.userId,
+         username: this.props.username, //TODO: make sure its using real data
          message: this.state.message
       });
       console.log("ws.send(): " + json);

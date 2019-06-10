@@ -86,7 +86,8 @@ class GameUI extends Component {
                </div>
             </div>
             <div className="row align-items-end">
-               <Chat ws={this.props.ws} />
+               <Chat ws={this.props.ws} username={this.state.playerName1} />
+               {/* TODO fix username above to real data */}
             </div>
          </div>
       );
