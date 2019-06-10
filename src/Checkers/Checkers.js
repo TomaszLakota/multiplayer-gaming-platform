@@ -71,6 +71,7 @@ class GameBoard extends Component {
    }
 
    handlePieceClick(e) {
+      this.handlePieceClickNew(e);
       let rowIndex = parseInt(e.target.attributes["data-row"].nodeValue);
       let cellIndex = parseInt(e.target.attributes["data-cell"].nodeValue);
       var state = this.state;

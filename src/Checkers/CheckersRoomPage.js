@@ -3,11 +3,11 @@ import Navbar from "../Navbar";
 import GameBoard from "./Checkers";
 import GameUI from "./GameUI";
 import { Redirect } from "react-router-dom";
-import { throws } from "assert";
 
 class CheckersRoomPage extends Component {
    constructor(props) {
       super(props);
+
       this.handleMove = this.handleMove.bind(this);
       this.handlePieceClick = this.handlePieceClick.bind(this);
       this.handleResign = this.handleResign.bind(this);
@@ -44,6 +44,7 @@ class CheckersRoomPage extends Component {
             ["r", "-", "r", "-", "r", "-", "r", "-"]
          ]
       };
+      this.connect();
       this.state.userId = Math.floor(Math.random() * 100);
       this.state.gameState.myColor = Math.floor(Math.random() * 2);
    }
@@ -66,7 +67,6 @@ class CheckersRoomPage extends Component {
    }
 
    componentDidMount() {
-      //this.connect();
       //this.checkIfLoggedIn();
 
       this.getRoomInfo();
@@ -80,8 +80,6 @@ class CheckersRoomPage extends Component {
       let body = {
          a: 1
       };
-
-      this.connect();
 
       fetch("https://localhost:44316/api/Room/" + roomNumber, {
          method: "POST",
@@ -142,11 +140,13 @@ class CheckersRoomPage extends Component {
          });
 
          this.ws.send(json);
+         console.log("CHECKERS ROOM PAGE ws open");
       };
 
       this.ws.onmessage = event => {
          console.log("ws.onmessage():");
          console.log(event.data);
+
          let state = this.state.gameState;
          state.currentPlayer = (state.currentPlayer + 1) % 2;
          state.gameStarted = true;
@@ -266,6 +266,7 @@ class CheckersRoomPage extends Component {
                      gameInfo={this.state.gameUI}
                      loading={this.state.loading}
                      loaded={this.state.loaded}
+                     ws={this.ws}
                   />
                </div>
             </div>
