@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./Checkers.css";
+import WithWebSocket from "./WebSocketHOC";
 
 //credit to Caleb OLeary, i modified his single player checkers app https://github.com/caleboleary/React-Checkers-and-AI-Opponent
 
@@ -29,24 +30,152 @@ class Cell extends Component {
 
 //game board calls row for each item in the board array
 class GameBoard extends Component {
-   state = {
-      board: this.props.board,
-      activePlayer: "r",
-      count: 0,
-      popShown: false,
-      prevRowIndex: null,
-      prevCellIndex: null
-   };
+   constructor(props) {
+      super(props);
+
+      this.state = {
+         board: [
+            ["-", "b", "-", "b", "-", "b", "-", "b"],
+            ["b", "-", "b", "-", "b", "-", "b", "-"],
+            ["-", "b", "-", "b", "-", "b", "-", "b"],
+            ["-", "-", "-", "-", "-", "-", "-", "-"],
+            ["-", "-", "-", "-", "-", "-", "-", "-"],
+            ["r", "-", "r", "-", "r", "-", "r", "-"],
+            ["-", "r", "-", "r", "-", "r", "-", "r"],
+            ["r", "-", "r", "-", "r", "-", "r", "-"]
+         ],
+         activePlayer: "r",
+         count: 0,
+         popShown: false,
+         prevRowIndex: null,
+         prevCellIndex: null,
+         gameState: {
+            currentPlayer: 0,
+            myColor: 0,
+            gameStarted: false,
+            gameEnded: false
+         },
+         gameId: this.props.gameId,
+         userId: this.props.userId
+      };
+
+      this.send = this.props.send.bind(this);
+   }
+
+   ws;
 
    componentDidUpdate() {
       console.log("board did update");
       console.log(this.state);
+      console.log(this.props);
    }
+
+   componentDidMount() {
+      this.ws = this.props.ws;
+      console.log(this.props);
+      if (this.ws.readyState === WebSocket.OPEN) {
+         this.initSocket();
+      } else {
+         this.ws.onopen = event => {
+            this.initSocket();
+         };
+      }
+   }
+
+   initSocket = () => {
+      this.ws.onmessage = event => {
+         console.log("ws.onmessage():");
+         console.log(event.data);
+
+         let state = this.state.gameState;
+         state.currentPlayer = (state.currentPlayer + 1) % 2;
+         state.gameStarted = true;
+         if (event.data.gameResult != null) {
+            state.gameResult = event.data.gameResult;
+         }
+         this.setState({
+            board: event.data.board,
+            gameState: state
+         });
+
+         if (event.data.gameResult != null) {
+            var modal = document.getElementById("myModal");
+            var span = document.getElementsByClassName("close")[0];
+            modal.style.display = "block";
+            span.onclick = function() {
+               modal.style.display = "none";
+            };
+            window.onclick = function(event) {
+               if (event.target === modal) {
+                  modal.style.display = "none";
+               }
+            };
+            var bearer = "Bearer " + this.state.token;
+            var url;
+            if (event.data.gameResult === 1) {
+               url = "https://localhost:44316/api/Game/Win";
+            } else {
+               url = "https://localhost:44316/api/Game/Win";
+            }
+            fetch(url, {
+               method: "GET",
+               withCredentials: true,
+               credentials: "include",
+               headers: {
+                  "Content-Type": "application/json",
+                  Authorization: bearer
+               }
+            })
+               .then(response => response.json())
+               .then(json => {
+                  console.log(json);
+               })
+               .catch(error => console.error("Error:", error));
+         }
+      };
+   };
+
+   // send = (message, typeString) => {
+   //    if (this.ws.readyState !== WebSocket.OPEN) {
+   //       console.log("ws not ready");
+   //       return 0;
+   //    }
+   //    var json = JSON.stringify({
+   //       gameId: this.state.gameId,
+   //       userId: this.state.userId,
+   //       moveString: message,
+   //       type: typeString
+   //    });
+   //    console.log("ws.send(): " + json);
+   //    this.ws.send(json);
+   // };
+
+   convertColumnIndexToLetter = c => {
+      return (c + 10).toString(36).toUpperCase();
+   };
+
+   sendMove = (a, b, c, d) => {
+      var a1 = this.convertColumnIndexToLetter(a);
+      var a2 = this.convertColumnIndexToLetter(c);
+
+      let state = this.state.gameState;
+      state.currentPlayer = (state.currentPlayer + 1) % 2;
+      state.gameStarted = true;
+      this.setState({ gameState: state });
+
+      this.send(a1 + (8 - b) + "-" + a2 + (8 - d), "move");
+   };
+
+   sendPieceClick = (a, b) => {
+      var a1 = this.convertColumnIndexToLetter(a);
+      console.log(a1 + (8 - b));
+      this.send(a1 + (8 - b), "piece-click");
+   };
 
    render() {
       return (
          <div className="board_container">
-            <div className={this.props.myColor === 1 ? "board_black" : "board"}>
+            <div className={this.props.gameState.myColor === 1 ? "board_black" : "board"}>
                {this.state.board.map(function(row, index) {
                   return <Row rowArr={row} handlePieceClick={this.handlePieceClick.bind(this)} rowIndex={index} key={"row" + index} />;
                }, this)}
@@ -66,7 +195,7 @@ class GameBoard extends Component {
       let cellIndex = parseInt(e.target.attributes["data-cell"].nodeValue);
 
       if (this.state.board[rowIndex][cellIndex].indexOf(this.state.activePlayer) > -1) {
-         this.props.handlePieceClick(cellIndex, rowIndex);
+         this.sendPieceClick(cellIndex, rowIndex);
       }
    }
 
@@ -89,7 +218,7 @@ class GameBoard extends Component {
       } else if (this.state.board[rowIndex][cellIndex].indexOf("h") > -1) {
          //this is activated if the piece clicked is a highlighted square, it moves the active piece to that spot.
          state.board = this.executeMove(rowIndex, cellIndex, this.state.board, this.state.activePlayer);
-         this.props.handleMove(this.state.prevCellIndex, this.state.prevRowIndex, cellIndex, rowIndex);
+         this.sendMove(this.state.prevCellIndex, this.state.prevRowIndex, cellIndex, rowIndex);
          //is the game over? if not, swap active player
          this.setState(this.state);
          if (this.winDetection(this.state.board, this.state.activePlayer)) {
@@ -314,4 +443,4 @@ class GameBoard extends Component {
    }
 }
 
-export default GameBoard;
+export default WithWebSocket(GameBoard);

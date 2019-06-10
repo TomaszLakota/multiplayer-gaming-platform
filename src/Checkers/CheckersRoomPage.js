@@ -3,17 +3,23 @@ import Navbar from "../Navbar";
 import GameBoard from "./Checkers";
 import GameUI from "./GameUI";
 import { Redirect } from "react-router-dom";
+import WithWebSocket from "./WebSocketHOC";
 
 class CheckersRoomPage extends Component {
    constructor(props) {
       super(props);
 
-      this.handleMove = this.handleMove.bind(this);
-      this.handlePieceClick = this.handlePieceClick.bind(this);
+      console.log("CHECKERS ROOM PAGE @@@@@@@@@@@");
+      console.log(this.send);
+      console.log(this.props);
+      console.log(this.state);
+      this.send = this.props.send.bind(this);
+      console.log(this.send);
       this.handleResign = this.handleResign.bind(this);
+
       let gameState = {
          currentPlayer: 0,
-         myColor: 0,
+         myColor: Math.floor(Math.random() * 2),
          gameStarted: false,
          gameEnded: false
       };
@@ -21,10 +27,11 @@ class CheckersRoomPage extends Component {
          loggedIn: false,
          loaded: false,
          clockInfo: this.clockInfo,
-         userId: 1221,
+         myUserId: 1221,
          gameId: 123,
          gameState: gameState,
          roomNumber: null,
+         userId: Math.floor(Math.random() * 100),
          gameUI: {
             error: null,
             isLoaded: false,
@@ -33,20 +40,9 @@ class CheckersRoomPage extends Component {
             playerName1: "koks",
             playerName2: "noob"
          },
-         board: [
-            ["-", "b", "-", "b", "-", "b", "-", "b"],
-            ["b", "-", "b", "-", "b", "-", "b", "-"],
-            ["-", "b", "-", "b", "-", "b", "-", "b"],
-            ["-", "-", "-", "-", "-", "-", "-", "-"],
-            ["-", "-", "-", "-", "-", "-", "-", "-"],
-            ["r", "-", "r", "-", "r", "-", "r", "-"],
-            ["-", "r", "-", "r", "-", "r", "-", "r"],
-            ["r", "-", "r", "-", "r", "-", "r", "-"]
-         ]
+         board: []
       };
       this.connect();
-      this.state.userId = Math.floor(Math.random() * 100);
-      this.state.gameState.myColor = Math.floor(Math.random() * 2);
    }
    clockInfo = {
       timeControl: 120,
@@ -68,7 +64,7 @@ class CheckersRoomPage extends Component {
 
    componentDidMount() {
       //this.checkIfLoggedIn();
-
+      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@ this.getRoomInfo();");
       this.getRoomInfo();
    }
 
@@ -77,13 +73,8 @@ class CheckersRoomPage extends Component {
       let roomNumber = window.location.href.substring(index + 1);
       this.setState({ roomNumber: roomNumber });
 
-      let body = {
-         a: 1
-      };
-
       fetch("https://localhost:44316/api/Room/" + roomNumber, {
-         method: "POST",
-         body: JSON.stringify(body),
+         method: "GET",
          headers: {
             "Content-Type": "application/json"
          }
@@ -126,121 +117,7 @@ class CheckersRoomPage extends Component {
          .catch(error => console.error("Error:", error));
    };
 
-   connect = () => {
-      this.ws = new WebSocket("ws://localhost:8080/CheckersSpring_war_exploded/game/" + this.state.userId);
-      console.log("new ws");
-      console.log(this.ws);
-
-      this.ws.onopen = event => {
-         var json = JSON.stringify({
-            gameId: this.state.gameId,
-            userId: this.state.userId,
-            userToken: this.state.token,
-            myColor: this.state.gameState.myColor
-         });
-
-         this.ws.send(json);
-         console.log("CHECKERS ROOM PAGE ws open");
-      };
-
-      this.ws.onmessage = event => {
-         console.log("ws.onmessage():");
-         console.log(event.data);
-
-         let state = this.state.gameState;
-         state.currentPlayer = (state.currentPlayer + 1) % 2;
-         state.gameStarted = true;
-         if (event.data.gameResult != null) {
-            state.gameResult = event.data.gameResult;
-         }
-         this.setState({
-            board: event.data.board,
-            gameState: state
-         });
-
-         if (event.data.gameResult != null) {
-            var modal = document.getElementById("myModal");
-            var span = document.getElementsByClassName("close")[0];
-            modal.style.display = "block";
-            span.onclick = function() {
-               modal.style.display = "none";
-            };
-            window.onclick = function(event) {
-               if (event.target === modal) {
-                  modal.style.display = "none";
-               }
-            };
-            var bearer = "Bearer " + this.state.token;
-            var url;
-            if (event.data.gameResult === 1) {
-               url = "https://localhost:44316/api/Game/Win";
-            } else {
-               url = "https://localhost:44316/api/Game/Win";
-            }
-            fetch(url, {
-               method: "GET",
-               withCredentials: true,
-               credentials: "include",
-               headers: {
-                  "Content-Type": "application/json",
-                  Authorization: bearer
-               }
-            })
-               .then(response => response.json())
-               .then(json => {
-                  console.log(json);
-               })
-               .catch(error => console.error("Error:", error));
-         }
-      };
-   };
-
-   send = (message, typeString) => {
-      if (this.ws.readyState !== WebSocket.OPEN) {
-         console.log("ws not ready");
-         return 0;
-      }
-      var json = JSON.stringify({
-         gameId: this.state.gameId,
-         userId: this.state.userId,
-         moveString: message,
-         type: typeString
-      });
-      console.log("ws.send(): " + json);
-      this.ws.send(json);
-   };
-
-   convertColumnIndexToLetter = c => {
-      return (c + 10).toString(36).toUpperCase();
-   };
-
-   handleMove = (a, b, c, d) => {
-      var a1 = this.convertColumnIndexToLetter(a);
-      var a2 = this.convertColumnIndexToLetter(c);
-
-      let state = this.state.gameState;
-      state.currentPlayer = (state.currentPlayer + 1) % 2;
-      state.gameStarted = true;
-      this.setState({ gameState: state });
-
-      this.send(a1 + (8 - b) + "-" + a2 + (8 - d), "move"); //TODO odkomentowac
-   };
-
-   handlePieceClick = (a, b) => {
-      var a1 = this.convertColumnIndexToLetter(a);
-      console.log(a1 + (8 - b));
-      this.send(a1 + (8 - b), "piece-click");
-   };
-
-   handleResign = () => {
-      console.log("resigned");
-      let gameState = this.state.gameState;
-      gameState.gameEnded = true;
-      this.setState({ gameState: gameState });
-
-      this.send("0");
-   };
-
+   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ RENDER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
    render() {
       if (!this.state.loggedIn && this.state.loaded) {
          return <Redirect to="/login" push />;
@@ -256,7 +133,7 @@ class CheckersRoomPage extends Component {
             </div>
             <div className="row justify-content-center">
                <div className="col-8">
-                  <GameBoard handlePieceClick={this.handlePieceClick} handleMove={this.handleMove} myColor={this.state.gameState.myColor} board={this.state.board} />
+                  <GameBoard ws={this.ws} {...this.state} />
                </div>
                <div className="col-4">
                   <GameUI
@@ -273,6 +150,40 @@ class CheckersRoomPage extends Component {
          </React.Fragment>
       );
    }
+
+   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ WEB SOCKET @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   connect = () => {
+      this.ws = new WebSocket("ws://localhost:8080/CheckersSpring_war_exploded/game/" + this.state.userId);
+      console.log("new ws");
+      console.log(this.ws);
+
+      this.ws.onopen = event => {
+         var json = JSON.stringify({
+            gameId: this.state.gameId,
+            userId: this.state.userId,
+            userToken: this.state.token,
+            myColor: this.state.gameState.myColor
+         });
+
+         this.ws.send(json);
+         console.log("CHECKERS ROOM PAGE ws open @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+      };
+
+      setTimeout(() => {
+         console.log("CHECKERS ROOM ws @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+         console.log(this.ws);
+         console.log(this.state);
+      }, 2000);
+   };
+
+   handleResign = () => {
+      console.log("resigned");
+      let gameState = this.state.gameState;
+      gameState.gameEnded = true;
+      this.setState({ gameState: gameState });
+
+      this.send("1", "resign");
+   };
 }
 
-export default CheckersRoomPage;
+export default WithWebSocket(CheckersRoomPage);

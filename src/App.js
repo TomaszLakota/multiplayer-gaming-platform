@@ -10,7 +10,6 @@ import LeaderboardPage from "./LeaderboardPage";
 import ProfilePage from "./ProfilePage";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route } from "react-router-dom";
-
 class App extends Component {
    render() {
       return (

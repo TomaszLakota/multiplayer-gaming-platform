@@ -1,6 +1,12 @@
 import React, { Component } from "react";
+import WithWebSocket from "./WebSocketHOC";
 
-export default class Chat extends Component {
+class Chat extends Component {
+   constructor(props) {
+      super(props);
+
+      this.send = this.props.send.bind(this);
+   }
    state = {
       messages: [],
       message: ""
@@ -35,18 +41,11 @@ export default class Chat extends Component {
    }
 
    handleSend = () => {
-      if (this.ws.readyState !== WebSocket.OPEN) {
-         console.log("ws not ready");
-         return 0;
-      }
-      var json = JSON.stringify({
-         gameId: this.state.gameId,
-         userId: this.state.userId,
+      let message = {
          username: this.props.username, //TODO: make sure its using real data
          message: this.state.message
-      });
-      console.log("ws.send(): " + json);
-      this.ws.send(json);
+      };
+      this.send(JSON.stringify(message), "message");
    };
 
    render() {
@@ -77,6 +76,7 @@ export default class Chat extends Component {
       this.setState({
          [e.target.id]: e.target.value
       });
-      console.log(this.state);
    };
 }
+
+export default WithWebSocket(Chat);
