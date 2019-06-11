@@ -131,20 +131,22 @@ class CheckersRoomPage extends Component {
                   <h1>{this.state.gameState.gameResult ? "Zwycięstwo" : "Porażka"}</h1>
                </div>
             </div>
-            <div className="row justify-content-center">
-               <div className="col-8">
-                  <GameBoard ws={this.ws} {...this.state} />
-               </div>
-               <div className="col-4">
-                  <GameUI
-                     handleResign={this.handleResign}
-                     gameState={this.state.gameState}
-                     clockInfo={this.state.clockInfo}
-                     gameInfo={this.state.gameUI}
-                     loading={this.state.loading}
-                     loaded={this.state.loaded}
-                     ws={this.ws}
-                  />
+            <div className="main-wrapper">
+               <div className="row justify-content-center">
+                  <div className="col-8">
+                     <GameBoard ws={this.ws} {...this.state} />
+                  </div>
+                  <div className="col-4">
+                     <GameUI
+                        handleResign={this.handleResign}
+                        gameState={this.state.gameState}
+                        clockInfo={this.state.clockInfo}
+                        gameInfo={this.state.gameUI}
+                        loading={this.state.loading}
+                        loaded={this.state.loaded}
+                        ws={this.ws}
+                     />
+                  </div>
                </div>
             </div>
          </React.Fragment>

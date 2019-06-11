@@ -2,6 +2,14 @@
    box-sizing: border-box;
 }
 
+body {
+   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#96b6b6+6,d0dede+55&0.65+0,0.66+70 */
+   background: -moz-linear-gradient(top, rgba(150, 182, 182, 0.65) 0%, rgba(150, 182, 182, 0.65) 6%, rgba(208, 222, 222, 0.66) 55%, rgba(208, 222, 222, 0.66) 70%); /* FF3.6-15 */
+   background: -webkit-linear-gradient(top, rgba(150, 182, 182, 0.65) 0%, rgba(150, 182, 182, 0.65) 6%, rgba(208, 222, 222, 0.66) 55%, rgba(208, 222, 222, 0.66) 70%); /* Chrome10-25,Safari5.1-6 */
+   background: linear-gradient(to bottom, #dbd7d1, #edebe9 116px) fixed;
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a696b6b6', endColorstr='#a8d0dede',GradientType=0 ); /* IE6-9 */
+   /* #edebe9  */
+}
 .form-container {
    width: 300px;
 }
@@ -12,9 +20,17 @@
 }
 
 #root {
+   width: 100%;
+}
+
+.main-wrapper {
+   display: flex;
+   justify-content: center;
+   width: 100%;
+}
+
+.main-wrapper > .row {
    width: 1005px;
-   background-color: #dbdbdb;
-   margin-top: 50px;
 }
 
 body {
@@ -23,8 +39,9 @@ body {
 }
 
 #root > .row > .col-4 {
+   margin-top: 50px;
    padding: 20px 15px;
-   background: #d5e2f6;
+   /* background: #eee; */
 }
 
 #root > .row > .col-8 {
