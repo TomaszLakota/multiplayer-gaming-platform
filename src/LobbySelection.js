@@ -32,7 +32,7 @@ class LobbySelection extends Component {
       })
          .then(response => response.json())
          .then(json => {
-            console.log(json);
+            // console.log(json);
             this.setState({
                roomList: json
             });
@@ -60,7 +60,6 @@ class LobbySelection extends Component {
       let room4 = room1;
       let roomList = [room1, room2, room3, room4];
       this.setState({ roomList: roomList });
-      console.log(this);
    };
 
    getRooms() {
@@ -82,7 +81,7 @@ class LobbySelection extends Component {
    }
 
    render() {
-      console.log(this.state);
+      // console.log(this.state);
       if (Array.isArray(this.state.roomList)) {
          var rooms = this.state.roomList.map((room, i) => {
             return <RoomInfoBar room={room} key={i} />;

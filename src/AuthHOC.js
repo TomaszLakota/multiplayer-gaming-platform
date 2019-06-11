@@ -8,14 +8,17 @@ export default function Authorized(WrappedComponent) {
          // console.log("logged in = " + loggedIn);
          this.state = {
             loggedIn: loggedIn,
-            loaded: false
+            loaded: false,
+            _isMounted: true
          };
       }
 
       componentDidMount() {
          var bearer = "Bearer " + localStorage.getItem("authToken");
          // console.log(bearer);
-
+         if (JSON.parse(localStorage.getItem("loggedIn")) === false) {
+            return 0;
+         }
          fetch("https://localhost:44316/api/user/Info", {
             method: "GET",
             withCredentials: true,

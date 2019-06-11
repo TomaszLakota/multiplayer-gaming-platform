@@ -5,6 +5,7 @@ export default class LogoutPage extends Component {
    constructor(props) {
       super(props);
       localStorage.removeItem("authToken");
+      localStorage.setItem("loggedIn", false);
       this.state = {
          redirect: false
       };

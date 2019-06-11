@@ -9,12 +9,12 @@ class RoomInfoBar extends Component {
 
    changeRoute = () => {
       this.setState({
-         goToRoom: this.props.room.roomId
+         goToRoom: this.props.room.id
       });
    };
 
    render() {
-      console.log(this.props);
+      // console.log(this.props);
       if (this.state.goToRoom != null) {
          return <Redirect to={"/room/" + this.state.goToRoom} push />;
       }
