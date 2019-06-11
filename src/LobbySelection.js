@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import RoomInfoBar from "./LobbyRoomInfoBar";
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 
 class LobbySelection extends Component {
    constructor(props) {
@@ -14,10 +14,13 @@ class LobbySelection extends Component {
    }
 
    requestRoomList = () => {
-      console.log(localStorage.getItem("authToken"));
+      console.log("REQUEST ROOM LIST");
+      // console.log(localStorage.getItem("authToken"));
       this.setState({ token: localStorage.getItem("authToken") });
       var bearer = "Bearer " + localStorage.getItem("authToken");
-
+      if (localStorage.getItem("authToken") === null) {
+         return 0;
+      }
       fetch("https://localhost:44316/api/Room/Rooms", {
          method: "GET",
          withCredentials: true,
@@ -89,6 +92,7 @@ class LobbySelection extends Component {
 
       return (
          <div className="lobbyPage">
+            {this.state.token === null && <Redirect to="/login" push />}
             <NavLink exact to={"/room/" + Math.floor(Math.random() * 10000)}>
                <button className="btn btn-info">Nowa gra</button>
             </NavLink>

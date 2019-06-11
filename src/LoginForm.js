@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 
 class LogInForm extends Component {
    state = {
@@ -42,9 +43,9 @@ class LogInForm extends Component {
          passwordErrorMessage: ""
       });
       if (json.status === 103) {
-         this.setState({ token: json.token });
          localStorage.setItem("authToken", json.token);
          localStorage.setItem("loggedIn", true);
+         this.setState({ token: json.token, redirect: true });
       }
       if (json.status === 102) {
          this.setState({ token: null, passwordErrorMessage: "Błędne hasło" });
@@ -52,13 +53,11 @@ class LogInForm extends Component {
          localStorage.setItem("loggedIn", false);
       }
       if (json.status === 101) {
-         //user nie istnieje
          this.setState({ token: null, loginErrorMessage: "Użytkownik nie istnieje" });
          localStorage.setItem("authToken", null);
          localStorage.setItem("loggedIn", false);
       }
       if (json.status === 400) {
-         //haslo za krotkie czy cos
          this.setState({ token: null, passwordErrorMessage: "Hasło zbyt krótkie" });
          localStorage.setItem("authToken", null);
          localStorage.setItem("loggedIn", false);
@@ -68,6 +67,7 @@ class LogInForm extends Component {
    render() {
       return (
          <div className="form-container">
+            {this.state.redirect && <Redirect to="/" push />}
             <form onSubmit={this.onSubmit}>
                <h2>Logowanie</h2>
                <div className="form-group">

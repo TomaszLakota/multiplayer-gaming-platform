@@ -8,6 +8,7 @@ import CheckersLobbyPage from "./LobbyPage";
 import CheckersRoomPage from "./Checkers/CheckersRoomPage";
 import LeaderboardPage from "./LeaderboardPage";
 import ProfilePage from "./ProfilePage";
+import LogoutPage from "./LogoutPage";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Route } from "react-router-dom";
 class App extends Component {
@@ -22,6 +23,7 @@ class App extends Component {
                <Route path="/room" component={CheckersRoomPage} />
                <Route exact path="/ranking" component={LeaderboardPage} />
                <Route exact path="/profile" component={ProfilePage} />
+               <Route exact path="/logout" component={LogoutPage} />
             </Router>
          </React.Fragment>
       );

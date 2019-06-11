@@ -4,8 +4,8 @@ export default function Authorized(WrappedComponent) {
    return class extends React.Component {
       constructor(props) {
          super(props);
-         let loggedIn = localStorage.getItem("loggedIn");
-         console.log("logged in = " + loggedIn);
+         let loggedIn = JSON.parse(localStorage.getItem("loggedIn"));
+         // console.log("logged in = " + loggedIn);
          this.state = {
             loggedIn: loggedIn,
             loaded: false
@@ -14,7 +14,8 @@ export default function Authorized(WrappedComponent) {
 
       componentDidMount() {
          var bearer = "Bearer " + localStorage.getItem("authToken");
-         console.log(bearer);
+         // console.log(bearer);
+
          fetch("https://localhost:44316/api/user/Info", {
             method: "GET",
             withCredentials: true,
@@ -30,6 +31,12 @@ export default function Authorized(WrappedComponent) {
                console.log(json);
                setTimeout(() => {
                   this.setState({
+                     email: json.currentUser.email,
+                     playerid: json.currentUser.id,
+                     money: json.currentUser.money,
+                     password: json.currentUser.password,
+                     rankingPoints: json.currentUser.rankingPoints,
+                     username: json.currentUser.username,
                      loggedIn: true,
                      loaded: true
                   });
