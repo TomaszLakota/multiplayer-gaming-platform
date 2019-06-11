@@ -7,17 +7,18 @@ import Authorized from "./AuthHOC";
 class ProfilePage extends Component {
    constructor(props) {
       super(props);
+      this.state = {};
    }
 
    componentDidMount() {}
 
    componentDidUpdate() {
-      console.log("PROFILE PAGE DID UPDATE");
-      console.log(this.props);
+      // console.log("PROFILE PAGE DID UPDATE");
+      // console.log(this.props);
    }
 
    render() {
-      console.log("PROFILE PAGE " + this.props.loggedIn);
+      // console.log("PROFILE PAGE " + this.props.loggedIn);
       if (!this.props.loggedIn && this.props.loaded) {
          return <Redirect to="/login" push />;
       }

@@ -9,12 +9,12 @@ class Profile extends Component {
    }
 
    componentDidUpdate() {
-      console.log("Profile component did update");
+      // console.log("Profile component did update");
    }
 
    render() {
-      console.log("####PROFIL");
-      console.log(this.props);
+      // console.log("####PROFIL");
+      // console.log(this.props);
       if (!this.props.loaded) {
          return <div className="profile-container"> loading... </div>;
       }
