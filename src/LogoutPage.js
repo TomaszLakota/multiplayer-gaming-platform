@@ -16,7 +16,7 @@ export default class LogoutPage extends Component {
          this.setState({
             redirect: true
          });
-      }, 1000);
+      }, 1);
 
       return (
          <div>

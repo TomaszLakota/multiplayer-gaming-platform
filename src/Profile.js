@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Authorized from "./AuthHOC";
 
 class Profile extends Component {
    constructor(props) {
@@ -9,12 +10,12 @@ class Profile extends Component {
    }
 
    componentDidUpdate() {
-      // console.log("Profile component did update");
+      console.log("Profile component did update");
    }
 
    render() {
       // console.log("####PROFIL");
-      // console.log(this.props);
+      console.log(this.props);
       if (!this.props.loaded) {
          return <div className="profile-container"> loading... </div>;
       }
@@ -82,4 +83,4 @@ class Profile extends Component {
    };
 }
 
-export default Profile;
+export default Authorized(Profile);

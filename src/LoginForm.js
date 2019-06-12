@@ -43,6 +43,7 @@ class LogInForm extends Component {
          passwordErrorMessage: ""
       });
       if (json.status === 103) {
+         console.log("zalogowano");
          localStorage.setItem("authToken", json.token);
          localStorage.setItem("loggedIn", true);
          this.setState({ token: json.token, redirect: true });

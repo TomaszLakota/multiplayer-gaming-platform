@@ -12,7 +12,6 @@ class SignUpForm extends Component {
    };
 
    handleChange = e => {
-      console.log(e);
       this.setState({
          [e.target.id]: e.target.value
       });
@@ -38,10 +37,11 @@ class SignUpForm extends Component {
    };
 
    handleResponse(json) {
-      console.log(json);
+      // console.log(json);
       this.setState({
          loginErrorMessage: "",
-         passwordErrorMessage: ""
+         passwordErrorMessage: "",
+         emailErrorMessage: ""
       });
       if (json.status === 100) {
          localStorage.setItem("authToken", json.token);
