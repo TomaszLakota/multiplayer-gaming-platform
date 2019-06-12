@@ -14,9 +14,11 @@ export default function Authorized(WrappedComponent) {
       }
 
       componentDidMount() {
+         console.log("Authorized component did mount");
          var bearer = "Bearer " + localStorage.getItem("authToken");
          // console.log(bearer);
          if (JSON.parse(localStorage.getItem("loggedIn")) === false) {
+            this.setState({ loaded: true, loggedIn: false });
             return 0;
          }
          fetch("https://localhost:44316/api/user/Info", {
@@ -32,23 +34,25 @@ export default function Authorized(WrappedComponent) {
             .then(json => {
                console.log("NAVBAR response");
                console.log(json);
-               setTimeout(() => {
-                  this.setState({
-                     email: json.currentUser.email,
-                     playerid: json.currentUser.id,
-                     money: json.currentUser.money,
-                     password: json.currentUser.password,
-                     rankingPoints: json.currentUser.rankingPoints,
-                     username: json.currentUser.username,
-                     loggedIn: true,
-                     loaded: true
-                  });
-               }, 1000);
+
+               this.setState({
+                  email: json.currentUser.email,
+                  playerid: json.currentUser.id,
+                  money: json.currentUser.money,
+                  password: json.currentUser.password,
+                  rankingPoints: json.currentUser.rankingPoints,
+                  username: json.currentUser.username,
+                  loggedIn: true,
+                  loaded: true
+               });
+
                localStorage.setItem("loggedIn", true);
             })
             .catch(error => {
-               this.setState({ loaded: true, loggedIn: false });
+               console.log("NAVBAR error");
                console.error("Error:", error);
+               this.setState({ loaded: true, loggedIn: false });
+
                localStorage.setItem("loggedIn", false);
             });
       }
