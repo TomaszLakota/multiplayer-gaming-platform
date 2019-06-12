@@ -131,7 +131,7 @@ class CheckersRoomPage extends Component {
                   <h1>{this.state.gameState.gameResult ? "Zwycięstwo" : "Porażka"}</h1>
                </div>
             </div>
-            <div className="main-wrapper">
+            <div className="main-wrapper justify-content-center">
                <div className="row justify-content-center">
                   <div className="col-8">
                      <GameBoard ws={this.ws} {...this.state} />

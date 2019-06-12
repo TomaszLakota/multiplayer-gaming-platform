@@ -80,7 +80,7 @@ class LogInForm extends Component {
                   <input type="password" id="password" className="form-control" onChange={this.handleChange} />
                   <span className="text-danger">{this.state.passwordErrorMessage}</span>
                </div>
-               <button>Logowanie</button>
+               <button className="btn">Logowanie</button>
             </form>
          </div>
       );

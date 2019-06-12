@@ -14,7 +14,7 @@ class LoginPage extends Component {
          <React.Fragment>
             <Navbar />
             <div className="row justify-content-center">
-               <div className="col-4">
+               <div className="col-2">
                   <LogInForm />
                </div>
             </div>

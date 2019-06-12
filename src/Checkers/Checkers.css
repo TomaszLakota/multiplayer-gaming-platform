@@ -1,81 +1,207 @@
 .board_container {
-  width: 480px;
-  margin: 20px auto 20px auto;
+   width: 480px;
+   margin: 20px auto 20px auto;
 }
 .board_row {
-  height: 60px;
+   height: 60px;
 }
 .board_row:nth-child(odd) .cell:nth-child(odd) {
-  background-color: #efdc8f;
+   background-color: #efdc8f;
 }
 .board_row:nth-child(odd) .cell:nth-child(even) {
-  background-color: #774c1c;
+   background-color: #774c1c;
 }
 .board_row:nth-child(even) .cell:nth-child(even) {
-  background-color: #efdc8f;
+   background-color: #efdc8f;
 }
 .board_row:nth-child(even) .cell:nth-child(odd) {
-  background-color: #774c1c;
+   background-color: #774c1c;
 }
 .cell {
-  height: 60px;
-  width: 60px;
-  display: inline-block;
+   height: 60px;
+   width: 60px;
+   display: inline-block;
 }
 .cell .gamePiece {
-  width: 50px;
-  height: 50px;
-  margin: 5px 0 0 5px;
-  border-radius: 50px;
-  cursor: pointer;
-  position: relative;
+   width: 50px;
+   height: 50px;
+   margin: 5px 0 0 5px;
+   border-radius: 50px;
+   cursor: pointer;
+   position: relative;
 }
 .cell .gamePiece:after {
-  content: " ";
-  position: absolute;
-  right: 1px;
-  top: -6px;
-  height: 48px;
-  width: 48px;
-  border-radius: 50px;
-  pointer-events: none;
+   content: " ";
+   position: absolute;
+   right: 1px;
+   top: -6px;
+   height: 48px;
+   width: 48px;
+   border-radius: 50px;
+   pointer-events: none;
 }
 .cell.cell-b .gamePiece {
-  background-color: #3a341b;
+   background-color: #3a341b;
 }
 .cell.cell-b.k .gamePiece:after {
-  background-color: #3a341b;
-  border: 1px solid white;
+   background-color: #3a341b;
+   border: 1px solid white;
 }
 .cell.cell-r .gamePiece {
-  background-color: #d44d4d;
+   background-color: #d44d4d;
 }
 .cell.cell-r.k .gamePiece:after {
-  background-color: #d44d4d;
-  border: 1px solid white;
+   background-color: #d44d4d;
+   border: 1px solid white;
 }
 .cell.cell-ab .gamePiece,
 .cell.cell-ar .gamePiece {
-  background-color: #6a6aff;
-  box-shadow: 0px 0px 24px #2983f3;
+   background-color: #6a6aff;
+   box-shadow: 0px 0px 24px #2983f3;
 }
 .cell.cell-ab.k .gamePiece:after,
 .cell.cell-ar.k .gamePiece:after {
-  background-color: #6a6aff;
-  border: 1px solid white;
+   background-color: #6a6aff;
+   border: 1px solid white;
 }
 .cell.cell-h {
-  background-color: #6a6aff !important;
+   background-color: #6a6aff !important;
 }
 .cell.m .gamePiece {
-  background-color: green;
+   background-color: green;
 }
 .board {
-  float: left;
-  transition-duration: 0.8s;
-  transition-property: transform;
+   float: left;
+   transition-duration: 0.8s;
+   transition-property: transform;
 }
 .board_black {
-  transform: rotate(180deg);
-  -webkit-transform: rotate(180deg);
+   transform: rotate(180deg);
+   -webkit-transform: rotate(180deg);
+}
+
+.main-wrapper {
+   display: flex;
+}
+.main-wrapper > .row {
+   width: 1005px;
+   padding: 50px 0;
+   /* border: 1px solid #333; */
+   border-radius: 10px;
+   background: #fbfbfb;
+   margin-top: 40px;
+   background-color: white;
+   box-shadow: 0 0 10px 0px black;
+}
+
+.main-wrapper > .row > .col-8 {
+   padding-right: 0px;
+   padding-left: 0px;
+}
+
+.main-wrapper > .row > .col-4 {
+   padding-right: 30px;
+   padding-left: 0px;
+}
+
+.gameUIContainer {
+   width: 100%;
+   height: 100%;
+   margin: 0;
+   padding: 0;
+   display: flex;
+   align-items: flex-end;
+   flex-wrap: wrap;
+   align-content: space-between;
+}
+
+.gameUIContainer > .row {
+   width: 100%;
+   margin: 0;
+   padding: 0;
+}
+
+.gameUIContainer > .row > .row {
+   width: 100%;
+   margin-left: 0;
+   margin-right: 0;
+   padding: 0;
+}
+
+.GUI_buttons {
+   height: 50px;
+   margin: 10px 0px;
+}
+
+.GUI_buttons .btn {
+   margin: 1px;
+   width: 100%;
+}
+
+.GUI_buttons .col-4 {
+   padding: 1px !important;
+}
+
+.GUI_info {
+   margin-bottom: 20px;
+}
+
+.GUI_name {
+   width: 49%;
+   margin-bottom: 10px;
+}
+
+.GUI_chat {
+   margin: 10px 0px 15px 0;
+}
+
+.GUI_chat > .col {
+   padding: 0;
+}
+
+.GUI_chat_text {
+   background: white;
+   margin: 0;
+   border: 1px solid #333;
+   border-bottom: none;
+   overflow-y: auto;
+   height: 200px;
+   align-self: flex-end;
+}
+
+.GUI_chat_text + div {
+   margin-top: 0px;
+}
+
+.GUI_chat_text + div > button {
+   display: inline;
+   float: right;
+}
+
+.GUI_chat_text + div > input {
+   display: inline;
+   margin-top: 0px;
+   width: 247px;
+   font-size: 10pt;
+   height: 30px;
+   border: none;
+   border: 1px solid #333;
+   border-right: none;
+   padding-left: 3px;
+}
+
+.GUI_chat_text > p {
+   padding: 5px 5px 0 5px;
+   margin: 0;
+   font-size: 10pt;
+}
+
+.GUI_chat_text > p > span {
+   font-size: 11pt;
+   font-weight: bold;
+}
+
+.GUI_clocks {
+   font-family: Verdana, Geneva, Tahoma, sans-serif;
+   min-height: 38px;
 }

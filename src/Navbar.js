@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { NavLink, Redirect } from "react-router-dom";
+import { NavLink, Link, Redirect } from "react-router-dom";
 import Authorized from "./AuthHOC";
+import logo from "./logo.png";
 
 class Navbar extends Component {
    state = {
@@ -26,24 +27,24 @@ class Navbar extends Component {
 
       const loggedInButtons = (
          <React.Fragment>
-            <button className="btn btn-info ml-auto mr-2" onClick={() => this.setState({ logout: true })}>
+            <Link className="link" exact to="/logout">
                Wyloguj
-            </button>
+            </Link>
          </React.Fragment>
       );
       const loggedOutButtons = (
          <React.Fragment>
-            <button className="btn btn-success ml-auto mr-2" onClick={() => this.setState({ login: true })}>
+            <Link className="link" exact to="/login">
                Logowanie
-            </button>
-            <button className="btn btn-warning   mr-2" onClick={() => this.setState({ register: true })}>
+            </Link>
+            <Link className="link" exact to="/register">
                Rejestracja
-            </button>
+            </Link>
          </React.Fragment>
       );
       const routes = (
          <React.Fragment>
-            {this.state.logout && <Redirect to="/logout" push />}
+            {this.state.logout && <Redirect to="/" push />}
             {this.state.login && <Redirect to="/login" push />}
             {this.state.register && <Redirect to="/register" push />}
          </React.Fragment>
@@ -52,9 +53,9 @@ class Navbar extends Component {
       return (
          <React.Fragment>
             {routes}
-            <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-end">
-               <NavLink className="text-white" exact to="/">
-                  Check Mate!
+            <nav className="navbar navbar-expand-sm navbar-light justify-content-end">
+               <NavLink exact to="/">
+                  <img src={logo} alt="logo" />
                </NavLink>
                {/* <LoginLayout /> */}
                {this.props.loggedIn === true ? loggedInButtons : loggedOutButtons}
@@ -64,14 +65,14 @@ class Navbar extends Component {
                <div className="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
                   <ul className="navbar-nav text-right">
                      <li className="nav-item active">
-                        <NavLink className="nav-link" exact to="/ranking">
+                        <Link className="link" exact to="/ranking">
                            Ranking
-                        </NavLink>
+                        </Link>
                      </li>
                      <li className="nav-item active">
-                        <NavLink className="nav-link" exact to="/profile">
+                        <Link className="link" exact to="/profile">
                            Profil
-                        </NavLink>
+                        </Link>
                      </li>
                   </ul>
                </div>

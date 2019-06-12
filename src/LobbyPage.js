@@ -19,7 +19,7 @@ class CheckersLobbyPage extends Component {
          <React.Fragment>
             <Navbar />
             <div className="row justify-content-center">
-               <div className="col-8">
+               <div className="col-5">
                   <LobbySelection gameID="1" gameName="Warcaby" />
                </div>
             </div>

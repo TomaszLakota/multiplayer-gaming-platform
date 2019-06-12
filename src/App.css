@@ -2,6 +2,15 @@
    box-sizing: border-box;
 }
 
+body {
+   /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#96b6b6+6,d0dede+55&0.65+0,0.66+70 */
+   background: -moz-linear-gradient(top, rgba(150, 182, 182, 0.65) 0%, rgba(150, 182, 182, 0.65) 6%, rgba(208, 222, 222, 0.66) 55%, rgba(208, 222, 222, 0.66) 70%); /* FF3.6-15 */
+   background: -webkit-linear-gradient(top, rgba(150, 182, 182, 0.65) 0%, rgba(150, 182, 182, 0.65) 6%, rgba(208, 222, 222, 0.66) 55%, rgba(208, 222, 222, 0.66) 70%); /* Chrome10-25,Safari5.1-6 */
+   background: linear-gradient(to bottom, #dbd7d1, #edebe9 116px) fixed;
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a696b6b6', endColorstr='#a8d0dede',GradientType=0 ); /* IE6-9 */
+   /* #edebe9  */
+}
+
 .form-container {
    width: 300px;
 }
@@ -12,9 +21,10 @@
 }
 
 #root {
-   width: 1005px;
+   width: 100%;
+   /* width: 1005px;
    background-color: #dbdbdb;
-   margin-top: 50px;
+   margin-top: 50px; */
 }
 
 body {
@@ -24,7 +34,7 @@ body {
 
 #root > .row > .col-4 {
    padding: 20px 15px;
-   background: #d5e2f6;
+   /* background: #d5e2f6; */
 }
 
 #root > .row > .col-8 {
@@ -33,7 +43,7 @@ body {
 
 #root > .row > .col-6 {
    padding: 15px;
-   background: #d5e2f6;
+   /* background: #d5e2f6; */
 }
 
 #root > .row {
@@ -42,116 +52,26 @@ body {
 
 #root > .row > .col-12 {
    padding: 20px 15px;
-   background: #d5e2f6;
+   /* background: #d5e2f6; */
 }
 
 #root ul {
    padding-left: 0;
 }
 
-.gameUIContainer {
-   width: 100%;
-   height: 100%;
-   margin: 0;
-   padding: 0;
-   display: flex;
-   align-items: flex-end;
-   flex-wrap: wrap;
-   align-content: space-between;
-}
-
-.gameUIContainer > .row {
-   width: 100%;
-   margin: 0;
-   padding: 0;
-}
-
-.gameUIContainer > .row > .row {
-   width: 100%;
-   margin-left: 0;
-   margin-right: 0;
-   padding: 0;
-}
-
-.GUI_buttons {
-   height: 50px;
-   margin: 10px 0px;
-}
-
-.GUI_buttons .btn {
-   margin: 1px;
-   width: 100%;
-}
-
-.GUI_buttons .col-4 {
-   padding: 1px !important;
-}
-
-.GUI_info {
-   margin-bottom: 20px;
-}
-
-.GUI_name {
-   width: 49%;
-   margin-bottom: 10px;
-}
-
-.GUI_chat {
-   margin: 10px 0px 15px 0;
-}
-
-.GUI_chat > .col {
-   padding: 0;
-}
-
-.GUI_chat_text {
-   background: white;
-   margin: 0;
-
-   overflow-y: auto;
-   height: 200px;
-   align-self: flex-end;
-}
-
-.GUI_chat_text + div {
-   margin-top: 0px;
-}
-
-.GUI_chat_text + div > button {
-   display: inline;
-   float: right;
-}
-
-.GUI_chat_text + div > input {
-   display: inline;
-   margin-top: 0px;
-   width: 247px;
-   font-size: 10pt;
-   height: 30px;
-   border: none;
-   border-top: 1px solid gray;
-   padding-left: 3px;
-}
-
-.GUI_chat_text > p {
-   padding: 5px 5px 0 5px;
-   margin: 0;
-   font-size: 10pt;
-}
-
-.GUI_chat_text > p > span {
-   font-size: 11pt;
-   font-weight: bold;
-}
-
-.GUI_clocks {
-   font-family: Verdana, Geneva, Tahoma, sans-serif;
-   min-height: 38px;
-}
-
 .lobbyPage button {
    margin-bottom: 5px;
    float: right;
+}
+
+.lobbyPage {
+   padding: 50px;
+   /* border: 1px solid #333; */
+   border-radius: 10px;
+   background: #fbfbfb;
+   margin-top: 40px;
+   background-color: white;
+   box-shadow: 0 0 10px 0px black;
 }
 
 .lobbyTableContainer table {
@@ -266,4 +186,145 @@ body {
 
 .tableContainer table {
    border: 2px solid gray;
+}
+
+nav {
+   width: 55%;
+   margin: auto;
+   height: 150px;
+}
+nav img {
+   width: 250px;
+   margin-right: auto;
+}
+nav .link {
+   text-decoration: none;
+   color: #333;
+   padding: 20px 20px;
+   font-weight: 400;
+   font-size: 1.2em;
+}
+
+nav a:first-of-type {
+   margin-right: auto;
+}
+
+.form-container {
+   width: 400px;
+   text-align: center;
+   border: 2px solid #ddd;
+   border-radius: 10px;
+   padding: 50px;
+   background-color: #fbfbfb;
+   margin-top: 80px;
+}
+.form-container button {
+   /* background-color: #ddd; */
+   margin-top: 10px;
+}
+
+.form-container button {
+   font-family: arial, helvetica, sans-serif;
+   padding: 10px 10px 10px 10px;
+   text-decoration: none;
+   display: inline-block;
+   background-color: #e6e6e6;
+   background-image: -webkit-gradient(linear, left top, left bottom, from(#e6e6e6), to(#cccccc));
+   background-image: -webkit-linear-gradient(top, #e6e6e6, #cccccc);
+   background-image: -moz-linear-gradient(top, #e6e6e6, #cccccc);
+   background-image: -ms-linear-gradient(top, #e6e6e6, #cccccc);
+   background-image: -o-linear-gradient(top, #e6e6e6, #cccccc);
+   background-image: linear-gradient(to bottom, #e6e6e6, #cccccc);
+   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#E6E6E6, endColorstr=#CCCCCC);
+}
+
+.form-container button:hover {
+   background-color: #cdcdcd;
+   background-image: -webkit-gradient(linear, left top, left bottom, from(#cdcdcd), to(#b3b3b3));
+   background-image: -webkit-linear-gradient(top, #cdcdcd, #b3b3b3);
+   background-image: -moz-linear-gradient(top, #cdcdcd, #b3b3b3);
+   background-image: -ms-linear-gradient(top, #cdcdcd, #b3b3b3);
+   background-image: -o-linear-gradient(top, #cdcdcd, #b3b3b3);
+   background-image: linear-gradient(to bottom, #cdcdcd, #b3b3b3);
+   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#cdcdcd, endColorstr=#b3b3b3);
+}
+
+.form-container h2 {
+   margin-bottom: 30px;
+}
+
+.form-container label {
+   font-size: 1.5em;
+   margin-bottom: 5px;
+}
+
+.imageWithCaptionSmall {
+   width: 200px;
+   height: 250px;
+   margin: 25px 50px 0 50px;
+   display: block;
+   text-align: center;
+}
+
+.imageWithCaptionSmall a {
+   text-decoration: none;
+   color: black;
+}
+
+.imageWithCaptionSmall .img {
+   width: 200px;
+   max-height: 200px;
+   overflow: hidden;
+   margin: 0;
+}
+
+.imageWithCaptionBig {
+   width: 650px;
+   height: 650px;
+   margin: 25px;
+   display: block;
+   text-align: center;
+}
+
+.imageWithCaptionBig .img {
+   width: 650px;
+   max-height: 600px;
+   overflow: hidden;
+   margin: 0;
+}
+
+.imageWithCaptionTall {
+   width: 300px;
+   height: 650px;
+   margin: 25px;
+   display: block;
+   text-align: center;
+}
+
+.imageWithCaptionTall .img {
+   width: 300px;
+   max-height: 600px;
+   overflow: hidden;
+   margin: 0;
+}
+
+.imageWithCaptionSmall img,
+.imageWithCaptionBig img {
+   display: block; /*remove inline-block spaces*/
+   width: 100%; /*make image streatch*/
+}
+.imageWithCaptionTall img {
+   display: block; /*remove inline-block spaces*/
+   min-height: 100%; /*make image streatch*/
+}
+
+.gameSelectionContainer {
+   padding: 50px;
+   /* border: 1px solid #333; */
+   border-radius: 10px;
+   background: #fbfbfb;
+   margin-top: 40px;
+   background-color: white;
+   box-shadow: 0 0 10px 0px black;
+   max-width: 600px;
 }

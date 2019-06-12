@@ -9,10 +9,8 @@ class MainPage extends Component {
          <React.Fragment>
             <Navbar />
             <div className="row justify-content-center">
-               <div className="col-4">
-                  <div className="row justify-content-center">
-                     <GameSelection />
-                  </div>
+               <div className="col-4 gameSelectionContainer">
+                  <GameSelection />
                </div>
             </div>
          </React.Fragment>
