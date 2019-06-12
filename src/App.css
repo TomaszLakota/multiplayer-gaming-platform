@@ -115,14 +115,6 @@ body {
    margin: 20px 0;
 }
 
-.profile-container input {
-   width: 150px;
-}
-
-.profile-container tr td:first-child {
-   font-weight: bold;
-}
-
 .modal {
    display: none; /* Hidden by default */
    position: fixed; /* Stay in place */
@@ -157,35 +149,6 @@ body {
    color: #000;
    text-decoration: none;
    cursor: pointer;
-}
-
-.tableContainer {
-   display: flex;
-   justify-content: center;
-}
-
-.tableContainer th {
-   padding: 0 40px;
-}
-
-.tableContainer td {
-   padding: 0 40px;
-}
-
-.tableContainer thead tr:first-of-type {
-   background-color: #aaa;
-}
-
-.tableContainer tr:nth-last-child(even) {
-   background-color: #ddd;
-}
-
-.tableContainer tr {
-   background-color: #ccc;
-}
-
-.tableContainer table {
-   border: 2px solid gray;
 }
 
 nav {
@@ -327,4 +290,83 @@ nav a:first-of-type {
    background-color: white;
    box-shadow: 0 0 10px 0px black;
    max-width: 600px;
+}
+
+.profile-container {
+   padding: 50px;
+   /* border: 1px solid #333; */
+   border-radius: 10px;
+   background: #fbfbfb;
+   margin-top: 40px;
+   background-color: white;
+   box-shadow: 0 0 10px 0px black;
+}
+
+.profile-container input {
+   width: 150px;
+}
+
+.profile-container tr td:first-child {
+   font-weight: bold;
+}
+
+.tableContainer {
+   padding: 50px;
+   /* border: 1px solid #333; */
+   border-radius: 10px;
+   background: #fbfbfb;
+   margin-top: 40px;
+   background-color: white;
+   box-shadow: 0 0 10px 0px black;
+}
+
+.tableContainer {
+   display: flex;
+   justify-content: center;
+   font-size: 1.2em;
+}
+
+.tableContainer table {
+   width: 100%;
+}
+
+.tableContainer table tr:nth-of-type(odd) {
+   background: #eee;
+}
+
+.tableContainer table tr:nth-of-type(even) {
+   background: #f6f6f6;
+}
+
+.tableContainer table thead tr:first-of-type {
+   background: #666;
+   color: white;
+   font-weight: 400;
+}
+
+.tableContainer th {
+   padding: 10px;
+   background: #999;
+   color: white;
+   font-weight: 400;
+}
+
+.tableContainer td {
+   padding: 10px;
+}
+
+.tableContainer td:nth-child(1) {
+   width: 15%;
+}
+
+/* .tableContainer td:nth-child(2) {
+   width: 70%;
+} */
+
+.tableContainer td:nth-child(3) {
+   width: 15%;
+}
+
+.tableContainer h1 {
+   margin-bottom: 20px;
 }

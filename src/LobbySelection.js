@@ -32,34 +32,12 @@ class LobbySelection extends Component {
       })
          .then(response => response.json())
          .then(json => {
-            // console.log(json);
+            console.log(json);
             this.setState({
                roomList: json
             });
          })
          .catch(error => console.error("Error:", error));
-
-      //TODO usunac placeholdery
-      let room1 = {
-         id: 333,
-         player1: "kozak",
-         playerRanking: "1050",
-         stakes: 10,
-         timeControl: 120,
-         timeControlBonus: 5
-      };
-      let room2 = {
-         id: 333,
-         player1: "kozak",
-         playerRanking: "777",
-         stakes: 101,
-         timeControl: 1200,
-         timeControlBonus: 65
-      };
-      let room3 = room1;
-      let room4 = room1;
-      let roomList = [room1, room2, room3, room4];
-      this.setState({ roomList: roomList });
    };
 
    getRooms() {

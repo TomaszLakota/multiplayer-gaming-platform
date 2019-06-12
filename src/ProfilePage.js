@@ -10,15 +10,7 @@ class ProfilePage extends Component {
       this.state = {};
    }
 
-   componentDidMount() {}
-
-   componentDidUpdate() {
-      // console.log("PROFILE PAGE DID UPDATE");
-      // console.log(this.props);
-   }
-
    render() {
-      // console.log("PROFILE PAGE " + this.props.loggedIn);
       if (!this.props.loggedIn && this.props.loaded) {
          return <Redirect to="/login" push />;
       }
@@ -26,7 +18,7 @@ class ProfilePage extends Component {
          <React.Fragment>
             <Navbar />
             <div className="row justify-content-center">
-               <div className="col-12">
+               <div className="col-4">
                   <Profile {...this.state} {...this.props} />
                </div>
             </div>

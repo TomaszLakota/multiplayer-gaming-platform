@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { NavLink, Link, Redirect } from "react-router-dom";
 import Authorized from "./AuthHOC";
-import logo from "./logo.png";
+import logo from "./images/logo.png";
 
 class Navbar extends Component {
    state = {
