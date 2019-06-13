@@ -78,6 +78,7 @@ class CheckersRoomPage extends Component {
       })
          .then(response => response.json())
          .then(response => {
+            console.log("ROOM: room api fetch response:");
             console.log(response);
             // if (response.player1Name != null) {
             //    let gameUI = this.state.gameUI;
@@ -152,10 +153,10 @@ class CheckersRoomPage extends Component {
 
    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ WEB SOCKET @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
    connect = () => {
-      console.log("ROOM: connect was called");
+      // console.log("ROOM: connect was called");
       this.ws = new WebSocket("ws://localhost:8080/CheckersSpring_war_exploded/game/" + this.state.userId);
       this.ws.onopen = event => {
-         console.log("onopen triggered");
+         // console.log("onopen triggered");
          var json = JSON.stringify({
             gameId: this.state.gameId,
             userId: this.state.userId,
@@ -164,14 +165,6 @@ class CheckersRoomPage extends Component {
          });
          this.ws.send(json);
       };
-      console.log(this.ws.onopen);
-
-      setTimeout(() => {
-         console.log("ROOM 2s later; logging ws, state");
-         console.log(this.ws);
-         console.log(this.ws.onopen);
-         console.log(this.state);
-      }, 2000);
    };
 
    handleResign = () => {

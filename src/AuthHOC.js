@@ -14,7 +14,7 @@ export default function Authorized(WrappedComponent) {
       }
 
       componentDidMount() {
-         console.log("Authorized component did mount");
+         // console.log("Authorized component did mount");
          var bearer = "Bearer " + localStorage.getItem("authToken");
          // console.log(bearer);
          if (JSON.parse(localStorage.getItem("loggedIn")) === false) {
@@ -32,8 +32,8 @@ export default function Authorized(WrappedComponent) {
          })
             .then(response => response.json())
             .then(json => {
-               console.log("NAVBAR response");
-               console.log(json);
+               // console.log("AUTHORIZED response");
+               // console.log(json);
 
                this.setState({
                   email: json.currentUser.email,
@@ -49,7 +49,7 @@ export default function Authorized(WrappedComponent) {
                localStorage.setItem("loggedIn", true);
             })
             .catch(error => {
-               console.log("NAVBAR error");
+               console.log("AUTHORIZED error");
                console.error("Error:", error);
                this.setState({ loaded: true, loggedIn: false });
 

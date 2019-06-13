@@ -2,9 +2,6 @@ import React from "react";
 
 export default function WithWebSocket(WrappedComponent) {
    class WithWebSocket extends React.Component {
-      constructor(props) {
-         super(props);
-      }
       state = {
          gameId: null,
          userId: null,

@@ -21,7 +21,7 @@ class GameUI extends Component {
    }
 
    componentDidMount() {
-      console.log("GAMEUI did mount");
+      // console.log("GAMEUI did mount");
       this.ws = this.props.ws;
    }
 
@@ -31,19 +31,20 @@ class GameUI extends Component {
       };
    }
 
+   //TODO this makes no sense
    componentDidUpdate() {
-      console.log("component gameUI did update");
-      console.log(this.props.ws);
+      // console.log("component gameUI did update");
+      // console.log(this.props.ws);
       if (this.props.ws.readyState === WebSocket.OPEN && this.wsReady === false) {
-         console.log("gameui ws open");
+         // console.log("gameui ws open");
          this.ws = this.props.ws;
          this.wsReady = true;
       }
    }
 
    render() {
-      console.log("rendering gameUI");
-      console.log(this.props);
+      // console.log("rendering gameUI");
+      // console.log(this.props);
 
       return (
          <div className="gameUIContainer container">

@@ -65,15 +65,15 @@ class GameBoard extends Component {
    ws;
 
    componentDidUpdate() {
-      console.log("CHECKERS: board did update; state and props:");
-      console.log(this.state);
-      console.log(this.props);
+      // console.log("CHECKERS: board did update; state and props:");
+      // console.log(this.state);
+      // console.log(this.props);
    }
 
    componentDidMount() {
-      console.log("CHECKERS: board did mount; state and props:");
-      console.log(this.state);
-      console.log(this.props);
+      // console.log("CHECKERS: board did mount; state and props:");
+      // console.log(this.state);
+      // console.log(this.props);
 
       this.ws = this.props.ws;
 
