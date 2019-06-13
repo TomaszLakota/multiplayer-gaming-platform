@@ -27,17 +27,17 @@ class Navbar extends Component {
 
       const loggedInButtons = (
          <React.Fragment>
-            <Link className="link" exact to="/logout">
+            <Link className="link" to="/logout">
                Wyloguj
             </Link>
          </React.Fragment>
       );
       const loggedOutButtons = (
          <React.Fragment>
-            <Link className="link" exact to="/login">
+            <Link className="link" to="/login">
                Logowanie
             </Link>
-            <Link className="link" exact to="/register">
+            <Link className="link" to="/register">
                Rejestracja
             </Link>
          </React.Fragment>
@@ -54,7 +54,7 @@ class Navbar extends Component {
          <React.Fragment>
             {routes}
             <nav className="navbar navbar-expand-sm navbar-light justify-content-end">
-               <NavLink exact to="/">
+               <NavLink to="/">
                   <img src={logo} alt="logo" />
                </NavLink>
                {/* <LoginLayout /> */}
@@ -65,12 +65,12 @@ class Navbar extends Component {
                <div className="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
                   <ul className="navbar-nav text-right">
                      <li className="nav-item active">
-                        <Link className="link" exact to="/ranking">
+                        <Link className="link" to="/ranking">
                            Ranking
                         </Link>
                      </li>
                      <li className="nav-item active">
-                        <Link className="link" exact to="/profile">
+                        <Link className="link" to="/profile">
                            Profil
                         </Link>
                      </li>

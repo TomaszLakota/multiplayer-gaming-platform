@@ -10,7 +10,7 @@ export class ImageWithCaptionSmall extends Component {
                   <img src={this.props.image} alt="icon" />
                </a>
             </div>
-            <a href={this.props.link} className={this.props.link === null && "text-muted"}>
+            <a href={this.props.link} className={this.props.link === null ? "text-muted" : ""}>
                <h4>{this.props.caption}</h4>
             </a>
          </div>
