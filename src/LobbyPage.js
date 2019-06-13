@@ -32,7 +32,7 @@ class CheckersLobbyPage extends Component {
    }
 
    componentDidMount() {
-      console.log("(@*#&$()_*@#$)_@_#)$*_)@#$_)@#" + this._isMounted + this.props._isMounted);
+      // console.log("(@*#&$()_*@#$)_@_#)$*_)@#$_)@#" + this._isMounted + this.props._isMounted);
    }
 }
 

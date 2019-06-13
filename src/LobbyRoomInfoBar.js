@@ -8,6 +8,7 @@ class RoomInfoBar extends Component {
    }
 
    changeRoute = () => {
+      console.log(this.props.room.id);
       this.setState({
          goToRoom: this.props.room.id
       });
@@ -16,12 +17,12 @@ class RoomInfoBar extends Component {
    render() {
       // console.log(this.props);
       if (this.state.goToRoom != null) {
-         return <Redirect to={"/room/" + this.state.goToRoom} push />;
+         return <Redirect to={"/Room/Manage?Id=" + this.state.goToRoom} push />;
       }
       return (
          <tr className="lobbyInfoBar" onClick={this.changeRoute}>
             <td>
-               {this.props.room.player1}
+               {this.props.room.player1Name}
                {/* vs {this.props.room.player2} */}
             </td>
             <td>{this.props.room.playerRanking}</td>
