@@ -19,15 +19,17 @@ class CheckersRoomPage extends Component {
          gameStarted: false,
          gameEnded: false
       };
+      let index = window.location.href.lastIndexOf("/");
+      let gameId = window.location.href.substring(index + 3);
       this.state = {
          loggedIn: false,
          loaded: false,
          clockInfo: this.clockInfo,
          myUserId: Math.floor(Math.random() * 1000),
-         gameId: 123,
+         gameId: gameId,
          gameState: gameState,
          roomNumber: null,
-         userId: Math.floor(Math.random() * 100),
+         userId: null,
          gameUI: {
             error: null,
             isLoaded: false,
@@ -66,14 +68,17 @@ class CheckersRoomPage extends Component {
    }
 
    getRoomInfo = () => {
-      let index = window.location.href.lastIndexOf("/");
+      let index = window.location.href.lastIndexOf("Id=");
       let roomNumber = window.location.href.substring(index + 1);
       this.setState({ roomNumber: roomNumber });
-
-      fetch("https://localhost:44316/api/Room/" + roomNumber, {
+      var bearer = "Bearer " + localStorage.getItem("authToken");
+      fetch("https://localhost:44316/api/room/settings", {
          method: "GET",
+         withCredentials: true,
+         credentials: "include",
          headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: bearer
          }
       })
          .then(response => response.json())
@@ -113,6 +118,46 @@ class CheckersRoomPage extends Component {
             //stworz gre na backendzie gry
          })
          .catch(error => console.error("Error:", error));
+
+      fetch("https://localhost:44316/api/user/Info", {
+         method: "GET",
+         withCredentials: true,
+         credentials: "include",
+         headers: {
+            "Content-Type": "application/json",
+            Authorization: bearer
+         }
+      })
+         .then(response => response.json())
+         .then(json => {
+            // console.log("AUTHORIZED response");
+            // console.log(json);
+
+            this.setState({
+               email: json.currentUser.email,
+               userId: json.currentUser.id,
+               money: json.currentUser.money,
+               password: json.currentUser.password,
+               rankingPoints: json.currentUser.rankingPoints,
+               username: json.currentUser.username,
+               loggedIn: true,
+               loaded: true
+            });
+
+            console.log("ROOM: sending initial");
+            let index = window.location.href.lastIndexOf("Id=");
+            let roomNumber = window.location.href.substring(index + 3);
+            var jsona = JSON.stringify({
+               gameId: roomNumber,
+               userId: json.currentUser.userId,
+               userToken: this.state.token,
+               myColor: this.state.gameState.myColor,
+               timeControl: 180,
+               timeControlBonus: 5
+            });
+            console.log(jsona);
+            this.ws.send(jsona);
+         });
    };
 
    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ RENDER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -155,16 +200,6 @@ class CheckersRoomPage extends Component {
    connect = () => {
       // console.log("ROOM: connect was called");
       this.ws = new WebSocket("ws://localhost:8080/CheckersSpring_war_exploded/game/" + this.state.userId);
-      this.ws.onopen = event => {
-         // console.log("onopen triggered");
-         var json = JSON.stringify({
-            gameId: this.state.gameId,
-            userId: this.state.userId,
-            userToken: this.state.token,
-            myColor: this.state.gameState.myColor
-         });
-         this.ws.send(json);
-      };
    };
 
    handleResign = () => {
