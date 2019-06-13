@@ -1,42 +1,22 @@
 import React from "react";
 
 export default function WithWebSocket(WrappedComponent) {
-   return class extends React.Component {
+   class WithWebSocket extends React.Component {
       constructor(props) {
          super(props);
-         console.log("WithWebSocker constructor");
       }
-      ws;
       state = {
          gameId: null,
          userId: null,
          send: this.send
       };
 
-      componentDidMount() {
-         console.log("@@@@@@@@@@@@@@@@@@@@@@ componentDidMount( @@@@@@@@@@@@@@");
-         this.ws = this.props.ws;
-         console.log(this.props);
-         if (this.props.ws === undefined) {
-            return 0;
-         }
-         if (this.props.ws.readyState === WebSocket.OPEN) {
-            this.initSocket();
-         } else {
-            this.props.ws.onopen = event => {
-               this.initSocket();
-            };
-         }
-         console.log("@@@@@@@@@@@@@@@@@@@@@@ componentDidMount EEEEEEEEEEEE( @@@@@@@@@@@@@@");
-      }
-
-      initSocket() {
-         console.log("@@@@@@@@@@@@@@@@@@@@@@ INIT SCOKET @@@@@@@@@@@@@@");
-      }
-
       send(message, typeString) {
-         if (this.ws.readyState !== WebSocket.OPEN) {
-            console.log("ws not ready");
+         console.log("WITHWEBSOCKET: called send() with arguments:");
+         console.log(message);
+         console.log(typeString);
+         if (this.props.ws.readyState !== WebSocket.OPEN) {
+            console.log("WITHWEBSOCKET: send() ws not ready");
             return 0;
          }
          var json = JSON.stringify({
@@ -45,14 +25,23 @@ export default function WithWebSocket(WrappedComponent) {
             message: message,
             type: typeString
          });
-         console.log("hoc this.state");
+         console.log("WITHWEBSOCKET: this.state, this.props.ws");
          console.log(this.state);
-         console.log("HOC ws.send(): " + json);
-         this.ws.send(json);
+         console.log(this.props.ws);
+         console.log("WITHWEBSOCKET: calling ws.send(): with json = ");
+         console.log(json);
+         this.props.ws.send(json);
       }
 
       render() {
          return <WrappedComponent {...this.state} {...this.props} />;
       }
-   };
+   }
+
+   WithWebSocket.displayName = `WithWebSocket(${getDisplayName(WrappedComponent)})`;
+   return WithWebSocket;
+}
+
+function getDisplayName(WrappedComponent) {
+   return WrappedComponent.displayName || WrappedComponent.name || "Component";
 }

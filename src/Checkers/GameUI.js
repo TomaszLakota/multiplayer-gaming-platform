@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ChessClock from "./ChessClock";
 import Chat from "./Chat";
+import WithWebSocket from "./WebSocketHOC";
 
 class GameUI extends Component {
    constructor(props) {
@@ -20,14 +21,8 @@ class GameUI extends Component {
    }
 
    componentDidMount() {
+      console.log("GAMEUI did mount");
       this.ws = this.props.ws;
-      if (this.props.ws.readyState === WebSocket.OPEN) {
-         this.initSocket();
-      } else {
-         this.props.ws.onopen = event => {
-            this.initSocket();
-         };
-      }
    }
 
    initSocket() {
@@ -97,4 +92,4 @@ class GameUI extends Component {
    handleDrawButtonClick = () => {};
 }
 
-export default GameUI;
+export default WithWebSocket(GameUI);

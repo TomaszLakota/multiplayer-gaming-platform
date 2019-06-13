@@ -65,31 +65,37 @@ class GameBoard extends Component {
    ws;
 
    componentDidUpdate() {
-      console.log("board did update");
+      console.log("CHECKERS: board did update; state and props:");
       console.log(this.state);
       console.log(this.props);
    }
 
    componentDidMount() {
-      this.ws = this.props.ws;
+      console.log("CHECKERS: board did mount; state and props:");
+      console.log(this.state);
       console.log(this.props);
-      if (this.ws.readyState === WebSocket.OPEN) {
-         this.initSocket();
-      } else {
-         this.ws.onopen = event => {
-            this.initSocket();
-         };
-      }
+
+      this.ws = this.props.ws;
+
+      setTimeout(() => {
+         console.log("CHECKERS: props and ws after 2s");
+         console.log(this.props);
+         console.log(this.ws);
+      }, 2000);
    }
 
+   //@@@@@@@@@@@@@@@@@@@ ONMESSAGE ONMESSAGE ONMESSAGE ONMESSAGE ONMESSAGE ONMESSAGE
    initSocket = () => {
+      console.log("CHECKERS: initsocket called");
       this.ws.onmessage = event => {
-         console.log("ws.onmessage():");
+         console.log("checkers received a message:");
          console.log(event.data);
 
          let state = this.state.gameState;
          state.currentPlayer = (state.currentPlayer + 1) % 2;
          state.gameStarted = true;
+
+         //@@@@@@@@@@@@@ WHEN RECEIVES A GAME BOARD WITH MOVE OR HIGHLIGHT
          if (event.data.gameResult != null) {
             state.gameResult = event.data.gameResult;
          }
@@ -98,6 +104,7 @@ class GameBoard extends Component {
             gameState: state
          });
 
+         //@@@@@@@@@@@@@ WHEN RECEIVES GAME RESULTS
          if (event.data.gameResult != null) {
             var modal = document.getElementById("myModal");
             var span = document.getElementsByClassName("close")[0];
@@ -135,21 +142,6 @@ class GameBoard extends Component {
       };
    };
 
-   // send = (message, typeString) => {
-   //    if (this.ws.readyState !== WebSocket.OPEN) {
-   //       console.log("ws not ready");
-   //       return 0;
-   //    }
-   //    var json = JSON.stringify({
-   //       gameId: this.state.gameId,
-   //       userId: this.state.userId,
-   //       moveString: message,
-   //       type: typeString
-   //    });
-   //    console.log("ws.send(): " + json);
-   //    this.ws.send(json);
-   // };
-
    convertColumnIndexToLetter = c => {
       return (c + 10).toString(36).toUpperCase();
    };
@@ -162,13 +154,11 @@ class GameBoard extends Component {
       state.currentPlayer = (state.currentPlayer + 1) % 2;
       state.gameStarted = true;
       this.setState({ gameState: state });
-
       this.send(a1 + (8 - b) + "-" + a2 + (8 - d), "move");
    };
 
    sendPieceClick = (a, b) => {
       var a1 = this.convertColumnIndexToLetter(a);
-      console.log(a1 + (8 - b));
       this.send(a1 + (8 - b), "piece-click");
    };
 
@@ -195,11 +185,15 @@ class GameBoard extends Component {
       let cellIndex = parseInt(e.target.attributes["data-cell"].nodeValue);
 
       if (this.state.board[rowIndex][cellIndex].indexOf(this.state.activePlayer) > -1) {
+         console.log("CHECKERS: calling sendPieceClick");
          this.sendPieceClick(cellIndex, rowIndex);
+      } else {
+         console.log("CHECKERS ERROR: nie twoj kolor/ruch");
       }
    }
 
    handlePieceClick(e) {
+      console.log("CHECKERS: handlePieceClick");
       this.handlePieceClickNew(e);
       let rowIndex = parseInt(e.target.attributes["data-row"].nodeValue);
       let cellIndex = parseInt(e.target.attributes["data-cell"].nodeValue);

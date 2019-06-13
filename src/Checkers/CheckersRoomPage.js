@@ -9,14 +9,10 @@ class CheckersRoomPage extends Component {
    constructor(props) {
       super(props);
 
-      console.log("CHECKERS ROOM PAGE @@@@@@@@@@@");
-      console.log(this.send);
-      console.log(this.props);
-      console.log(this.state);
       this.send = this.props.send.bind(this);
-      console.log(this.send);
       this.handleResign = this.handleResign.bind(this);
 
+      //TODO pobrac z propsów
       let gameState = {
          currentPlayer: 0,
          myColor: Math.floor(Math.random() * 2),
@@ -27,7 +23,7 @@ class CheckersRoomPage extends Component {
          loggedIn: false,
          loaded: false,
          clockInfo: this.clockInfo,
-         myUserId: 1221,
+         myUserId: Math.floor(Math.random() * 1000),
          gameId: 123,
          gameState: gameState,
          roomNumber: null,
@@ -50,8 +46,9 @@ class CheckersRoomPage extends Component {
    };
    ws;
 
+   //TODO proper
    checkIfLoggedIn() {
-      console.log("checkIfLoggedIn");
+      console.log("ROOM: checkIfLoggedIn was called");
       console.log(localStorage.getItem("authToken"));
       if (localStorage.getItem("authToken") === null) {
          this.setState({
@@ -64,7 +61,7 @@ class CheckersRoomPage extends Component {
 
    componentDidMount() {
       //this.checkIfLoggedIn();
-      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@ this.getRoomInfo();");
+      console.log("ROOM: componentDidMount: calling this.getRoomInfo();");
       this.getRoomInfo();
    }
 
@@ -82,35 +79,35 @@ class CheckersRoomPage extends Component {
          .then(response => response.json())
          .then(response => {
             console.log(response);
-            if (response.player1Name != null) {
-               let gameUI = this.state.gameUI;
-               let clockInfo = this.state.clockInfo;
-               gameUI.playerName1 = response.player1Name;
-               gameUI.stakes = response.room.cash;
-               gameUI.gameName = response.room.gameName;
-               clockInfo.timeControl = response.room.timeControl;
-               clockInfo.timeControlBonus = response.room.timeControlBonus;
-               this.setState({
-                  gameUI: gameUI,
-                  clockInfo: clockInfo
-               });
-            }
+            // if (response.player1Name != null) {
+            //    let gameUI = this.state.gameUI;
+            //    let clockInfo = this.state.clockInfo;
+            //    gameUI.playerName1 = response.player1Name;
+            //    gameUI.stakes = response.room.cash;
+            //    gameUI.gameName = response.room.gameName;
+            //    clockInfo.timeControl = response.room.timeControl;
+            //    clockInfo.timeControlBonus = response.room.timeControlBonus;
+            //    this.setState({
+            //       gameUI: gameUI,
+            //       clockInfo: clockInfo
+            //    });
+            // }
 
-            //nie istnieje pokoj
+            // //nie istnieje pokoj
 
-            //nie ma drugiego gracza
-            if (response.player2Id == null) {
-               setTimeout(() => {
-                  this.getRoomInfo();
-               }, 1000);
-               return;
-            }
+            // //nie ma drugiego gracza
+            // if (response.player2Id == null) {
+            //    setTimeout(() => {
+            //       this.getRoomInfo();
+            //    }, 1000);
+            //    return;
+            // }
 
-            let gameUI = this.state.gameUI;
-            gameUI.playerName2 = response.player2Name;
-            this.setState({
-               gameUI: gameUI
-            });
+            // let gameUI = this.state.gameUI;
+            // gameUI.playerName2 = response.player2Name;
+            // this.setState({
+            //    gameUI: gameUI
+            // });
 
             //stworz gre na backendzie gry
          })
@@ -155,25 +152,24 @@ class CheckersRoomPage extends Component {
 
    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ WEB SOCKET @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
    connect = () => {
+      console.log("ROOM: connect was called");
       this.ws = new WebSocket("ws://localhost:8080/CheckersSpring_war_exploded/game/" + this.state.userId);
-      console.log("new ws");
-      console.log(this.ws);
-
       this.ws.onopen = event => {
+         console.log("onopen triggered");
          var json = JSON.stringify({
             gameId: this.state.gameId,
             userId: this.state.userId,
             userToken: this.state.token,
             myColor: this.state.gameState.myColor
          });
-
          this.ws.send(json);
-         console.log("CHECKERS ROOM PAGE ws open @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
       };
+      console.log(this.ws.onopen);
 
       setTimeout(() => {
-         console.log("CHECKERS ROOM ws @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+         console.log("ROOM 2s later; logging ws, state");
          console.log(this.ws);
+         console.log(this.ws.onopen);
          console.log(this.state);
       }, 2000);
    };
@@ -184,7 +180,14 @@ class CheckersRoomPage extends Component {
       gameState.gameEnded = true;
       this.setState({ gameState: gameState });
 
-      this.send("1", "resign");
+      var json = JSON.stringify({
+         gameId: this.state.gameId,
+         userId: this.state.userId,
+         userToken: this.state.token,
+         myColor: this.state.gameState.myColor,
+         type: "resign"
+      });
+      this.ws.send(json);
    };
 }
 

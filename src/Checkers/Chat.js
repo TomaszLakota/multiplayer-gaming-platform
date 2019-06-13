@@ -15,19 +15,11 @@ class Chat extends Component {
 
    componentDidMount() {
       this.ws = this.props.ws;
-      console.log(this.props);
-      if (this.props.ws.readyState === WebSocket.OPEN) {
-         this.initSocket();
-      } else {
-         this.props.ws.onopen = event => {
-            this.initSocket();
-         };
-      }
    }
 
    initSocket() {
       this.ws.onmessage = event => {
-         console.log("chat new ws message");
+         console.log("CHAT: onmessage triggered");
 
          if (event.data.type === "chat-message") {
             this.setState({

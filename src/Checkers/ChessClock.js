@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import WithWebSocket from "./WebSocketHOC";
 
 class ChessClock extends Component {
    constructor(props) {
@@ -6,6 +7,7 @@ class ChessClock extends Component {
       this.state = { time: props.clockInfo.timeControl, currentPlayer: this.props.gameState.currentPlayer };
       // console.log(this.state);
    }
+   ws;
    render() {
       return (
          <div className="h2 col">
@@ -14,6 +16,9 @@ class ChessClock extends Component {
       );
    }
 
+   componentDidMount() {
+      this.ws = this.props.ws;
+   }
    componentDidUpdate() {
       // console.log("component chessclock did update");
       // console.log(this.props)
@@ -58,4 +63,4 @@ class ChessClock extends Component {
    }
 }
 
-export default ChessClock;
+export default WithWebSocket(ChessClock);
