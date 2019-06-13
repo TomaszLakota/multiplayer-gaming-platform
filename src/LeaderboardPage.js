@@ -8,11 +8,6 @@ class LeaderboardPage extends Component {
    };
 
    componentDidMount() {
-      let body = {
-         username: this.state.login,
-         password: this.state.password
-      };
-
       fetch("https://localhost:44316/api/user/Ranking", {
          method: "GET",
          headers: {

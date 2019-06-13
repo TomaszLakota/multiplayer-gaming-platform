@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import RoomInfoBar from "./LobbyRoomInfoBar";
-import { NavLink, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 class LobbySelection extends Component {
    constructor(props) {
