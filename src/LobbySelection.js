@@ -64,8 +64,8 @@ class LobbySelection extends Component {
       // console.log(bearer);
       let body = {
          cash: 10,
-         timeControl: 10,
-         timeControlBonus: 25
+         timeControl: 60,
+         timeControlBonus: 5
       };
       let rand = Math.floor(Math.random() * 100000000);
       fetch("https://localhost:44316/api/Room/Manage?Id=" + rand, {
