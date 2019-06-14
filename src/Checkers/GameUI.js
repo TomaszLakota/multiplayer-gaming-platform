@@ -6,18 +6,8 @@ import WithWebSocket from "./WebSocketHOC";
 class GameUI extends Component {
    constructor(props) {
       super(props);
-      this.state = {
-         error: null,
-         isLoaded: false,
-         gameName: this.props.gameInfo.gameName,
-         stakes: this.props.gameInfo.stakes,
-         playerName1: this.props.gameInfo.playerName1,
-         playerName2: this.props.gameInfo.playerName2,
-         clockInfo: props.clockInfo
-      };
 
       this.ws = null;
-      this.wsReady = false;
    }
 
    componentDidMount() {
@@ -25,17 +15,11 @@ class GameUI extends Component {
       this.ws = this.props.ws;
    }
 
-   initSocket() {
-      this.ws.onmessage = event => {
-         //TODO tutaj dodac odswiezenie parametrow gry
-      };
-   }
-
-   //TODO this makes no sense
    componentDidUpdate() {
       // console.log("component gameUI did update");
-      // console.log(this.props.ws);
-      if (this.props.ws.readyState === WebSocket.OPEN && this.wsReady === false) {
+      // console.log(this.props);
+
+      if (this.props.ws !== null && this.props.ws.readyState === WebSocket.OPEN && this.wsReady === false) {
          // console.log("gameui ws open");
          this.ws = this.props.ws;
          this.wsReady = true;
@@ -51,17 +35,17 @@ class GameUI extends Component {
             <div className="row">
                <div className="h4 GUI_info row text-center w-100">
                   <div className="col">
-                     {this.state.gameName} {this.state.clockInfo.timeControl / 60}m+{this.state.clockInfo.timeControlBonus}s {this.state.stakes}zł
+                     {this.props.gameName} {this.props.timeControl / 60}m+{this.props.timeControlBonus}s {this.props.stakes}zł
                   </div>
                </div>
 
                <div className="row text-center w-100">
-                  <div className="h5 GUI_name col">{this.state.playerName1}</div>
-                  <div className="h5 GUI_name col">{this.state.playerName2}</div>
+                  <div className="h5 GUI_name col">{this.props.playerName1 ? this.props.playerName1 : ""}</div>
+                  <div className="h5 GUI_name col">{this.props.playerName2 ? this.props.playerName2 : ""}</div>
                </div>
                <div className="row text-center w-100 GUI_clocks">
-                  <ChessClock ws={this.props.ws} clockInfo={this.props.clockInfo} gameState={this.props.gameState} clockID={0} key="clock1" />
-                  <ChessClock ws={this.props.ws} clockInfo={this.props.clockInfo} gameState={this.props.gameState} clockID={1} key="clock2" />
+                  <ChessClock ws={this.props.ws} clockInfo={this.props} gameState={this.props} clockID={0} key="clock1" />
+                  <ChessClock ws={this.props.ws} clockInfo={this.props} gameState={this.props} clockID={1} key="clock2" />
                </div>
                <div className="GUI_buttons row w-100">
                   <div className="col-4">
@@ -75,14 +59,14 @@ class GameUI extends Component {
                      </button>
                   </div>
                   <div className="col-4">
-                     <button className="btn btn-secondary" onClick={this.handleSettingsButtonClick}>
-                        Ustawienia
+                     <button className="btn btn-secondary" onClick={this.handleStartButton}>
+                        Start
                      </button>
                   </div>
                </div>
             </div>
             <div className="row align-items-end">
-               <Chat ws={this.props.ws} username={this.state.playerName1} />
+               <Chat ws={this.props.ws} username={this.props.playerName1} />
                {/* TODO fix username above to real data */}
             </div>
          </div>
@@ -91,6 +75,19 @@ class GameUI extends Component {
 
    handleSettingsButtonClick = () => {};
    handleDrawButtonClick = () => {};
+   handleStartButton = () => {
+      var json = JSON.stringify({
+         gameId: this.props.gameId,
+         userId: this.props.userId,
+         userToken: this.props.token,
+         myColor: this.props.myColor,
+         timeControl: this.props.timeControl,
+         timeControlBonus: this.props.timeControlBonus,
+         start: true
+      });
+      console.log(json);
+      this.props.ws.send(json);
+   };
 }
 
 export default WithWebSocket(GameUI);

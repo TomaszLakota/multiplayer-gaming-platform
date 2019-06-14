@@ -12,67 +12,126 @@ class CheckersRoomPage extends Component {
       this.send = this.props.send.bind(this);
       this.handleResign = this.handleResign.bind(this);
 
-      //TODO pobrac z propsów
-      let gameState = {
-         currentPlayer: 0,
-         myColor: Math.floor(Math.random() * 2),
-         gameStarted: false,
-         gameEnded: false
-      };
-      let index = window.location.href.lastIndexOf("/");
+      let index = window.location.href.lastIndexOf("Id=");
       let gameId = window.location.href.substring(index + 3);
       this.state = {
          loggedIn: false,
          loaded: false,
-         clockInfo: this.clockInfo,
-         myUserId: Math.floor(Math.random() * 1000),
+         isLoaded: false,
+         myUserId: null,
          gameId: gameId,
-         gameState: gameState,
-         roomNumber: null,
+         currentPlayer: 0,
+         myColor: 0,
+         gameStarted: false,
+         gameEnded: false,
          userId: null,
-         gameUI: {
-            error: null,
-            isLoaded: false,
-            gameName: "Warcaby",
-            stakes: 10,
-            playerName1: "koks",
-            playerName2: "noob"
-         },
-         board: []
+         gameName: "Warcaby",
+         stakes: null,
+         playerName1: null,
+         playerName2: null,
+         timeControl: null,
+         timeControlBonus: null,
+         player1ID: null,
+         player2ID: null,
+         board: [
+            ["-", "b", "-", "b", "-", "b", "-", "b"],
+            ["b", "-", "b", "-", "b", "-", "b", "-"],
+            ["-", "b", "-", "b", "-", "b", "-", "b"],
+            ["-", "-", "-", "-", "-", "-", "-", "-"],
+            ["-", "-", "-", "-", "-", "-", "-", "-"],
+            ["r", "-", "r", "-", "r", "-", "r", "-"],
+            ["-", "r", "-", "r", "-", "r", "-", "r"],
+            ["r", "-", "r", "-", "r", "-", "r", "-"]
+         ],
+         fetchStateUpdated1: false,
+         fetchStateUpdated2: false,
+         ws: null,
+         didntUpdateYet: true
       };
-      this.connect();
    }
-   clockInfo = {
-      timeControl: 120,
-      timeControlBonus: 5
-   };
-   ws;
 
-   //TODO proper
    checkIfLoggedIn() {
-      console.log("ROOM: checkIfLoggedIn was called");
-      console.log(localStorage.getItem("authToken"));
       if (localStorage.getItem("authToken") === null) {
          this.setState({
             loggedIn: false,
             loaded: true
          });
-         return 0;
       }
    }
 
    componentDidMount() {
-      //this.checkIfLoggedIn();
+      this.checkIfLoggedIn();
       console.log("ROOM: componentDidMount: calling this.getRoomInfo();");
       this.getRoomInfo();
    }
 
+   componentDidUpdate() {
+      if (this.state.fetchStateUpdated1 && this.state.fetchStateUpdated2 && this.state.didntUpdateYet) {
+         var ws = new WebSocket("ws://localhost:8080/CheckersSpring_war_exploded/game/" + this.state.userId);
+         ws.onopen = () => {
+            console.log("ROOM: sending initial");
+            var json = JSON.stringify({
+               gameId: this.state.gameId,
+               userId: this.state.userId,
+               userToken: this.state.token,
+               myColor: this.state.myColor,
+               timeControl: this.state.timeControl,
+               timeControlBonus: this.state.timeControlBonus,
+               start: false
+            });
+            console.log(json);
+            this.state.ws.send(json);
+         };
+
+         ws.onmessage = event => {
+            console.log("checkers received a message: ##################################################################################");
+            console.log(event.data);
+
+            //@@@@@@@@@@@@@ WHEN RECEIVES GAME RESULTS
+            if (event.data.gameResult != null) {
+               this.handleResult(event.data.gameResult);
+               return 0;
+            }
+
+            //@@@@@@@@@@@@@ WHEN RECEIVES A GAME BOARD WITH MOVE OR HIGHLIGHT
+
+            this.handleResult(event.data.gameResult);
+            this.setState({
+               board: event.data.board,
+               currentPlayer: (this.state.currentPlayer + 1) % 2,
+               gameStarted: true
+            });
+         };
+         this.setState({
+            ws: ws,
+            didntUpdateYet: false
+         });
+      }
+   }
+
    getRoomInfo = () => {
       let index = window.location.href.lastIndexOf("Id=");
-      let roomNumber = window.location.href.substring(index + 1);
-      this.setState({ roomNumber: roomNumber });
+      let gameId = window.location.href.substring(index + 3);
+      this.setState({ gameId: gameId });
       var bearer = "Bearer " + localStorage.getItem("authToken");
-      fetch("https://localhost:44316/api/room/settings", {
+
+      this.updateRoom();
+      this.joinRoom();
+      let interval = setInterval(() => {
+         this.updateRoom();
+      }, 1000);
+      this.setState({
+         interval: interval
+      });
+   };
+
+   updateRoom = () => {
+      let index = window.location.href.lastIndexOf("Id=");
+      let gameId = window.location.href.substring(index + 3);
+      this.setState({ gameId: gameId });
+      var bearer = "Bearer " + localStorage.getItem("authToken");
+
+      fetch("https://localhost:44316/api/Room/Settings/" + gameId, {
          method: "GET",
          withCredentials: true,
          credentials: "include",
@@ -83,44 +142,44 @@ class CheckersRoomPage extends Component {
       })
          .then(response => response.json())
          .then(response => {
-            console.log("ROOM: room api fetch response:");
-            console.log(response);
-            // if (response.player1Name != null) {
-            //    let gameUI = this.state.gameUI;
-            //    let clockInfo = this.state.clockInfo;
-            //    gameUI.playerName1 = response.player1Name;
-            //    gameUI.stakes = response.room.cash;
-            //    gameUI.gameName = response.room.gameName;
-            //    clockInfo.timeControl = response.room.timeControl;
-            //    clockInfo.timeControlBonus = response.room.timeControlBonus;
-            //    this.setState({
-            //       gameUI: gameUI,
-            //       clockInfo: clockInfo
-            //    });
-            // }
-
-            // //nie istnieje pokoj
-
-            // //nie ma drugiego gracza
-            // if (response.player2Id == null) {
-            //    setTimeout(() => {
-            //       this.getRoomInfo();
-            //    }, 1000);
-            //    return;
-            // }
-
-            // let gameUI = this.state.gameUI;
-            // gameUI.playerName2 = response.player2Name;
-            // this.setState({
-            //    gameUI: gameUI
-            // });
-
-            //stworz gre na backendzie gry
+            let color;
+            if (response.player1Id === response.myId) {
+               color = 0;
+            } else {
+               color = 1;
+            }
+            this.setState({
+               fetchStateUpdated1: true,
+               stakes: response.settings.cash,
+               playerName1: response.settings.player1Name,
+               playerName2: response.settings.player2Name,
+               timeControl: response.settings.timeControl,
+               timeControlBonus: response.settings.timeControlBonus,
+               gameName: response.settings.gameName,
+               userID1: response.user1id,
+               userID2: response.user2id,
+               myUserId: response.settings.yourId,
+               myColor: color
+            });
          })
          .catch(error => console.error("Error:", error));
+   };
 
-      fetch("https://localhost:44316/api/user/Info", {
-         method: "GET",
+   joinRoom = () => {
+      let index = window.location.href.lastIndexOf("Id=");
+      let gameId = window.location.href.substring(index + 3);
+      this.setState({ gameId: gameId });
+      var bearer = "Bearer " + localStorage.getItem("authToken");
+
+      let body = {
+         cash: 10,
+         timeControl: 10,
+         timeControlBonus: 25
+      };
+
+      fetch("https://localhost:44316/api/Room/Manage?Id=" + gameId, {
+         method: "POST",
+         body: JSON.stringify(body),
          withCredentials: true,
          credentials: "include",
          headers: {
@@ -130,36 +189,12 @@ class CheckersRoomPage extends Component {
       })
          .then(response => response.json())
          .then(json => {
-            // console.log("AUTHORIZED response");
-            // console.log(json);
-
-            this.setState({
-               email: json.currentUser.email,
-               userId: json.currentUser.id,
-               money: json.currentUser.money,
-               password: json.currentUser.password,
-               rankingPoints: json.currentUser.rankingPoints,
-               username: json.currentUser.username,
-               loggedIn: true,
-               loaded: true
-            });
-
-            console.log("ROOM: sending initial");
-            let index = window.location.href.lastIndexOf("Id=");
-            let roomNumber = window.location.href.substring(index + 3);
-            var jsona = JSON.stringify({
-               gameId: roomNumber,
-               userId: json.currentUser.userId,
-               userToken: this.state.token,
-               myColor: this.state.gameState.myColor,
-               timeControl: 180,
-               timeControlBonus: 5
-            });
-            console.log(jsona);
-            this.ws.send(jsona);
-         });
+            console.log("response manage ##############################");
+            console.log(json);
+            this.setState({ fetchStateUpdated2: true });
+         })
+         .catch(error => console.error("Error:", error));
    };
-
    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ RENDER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
    render() {
       if (!this.state.loggedIn && this.state.loaded) {
@@ -171,24 +206,16 @@ class CheckersRoomPage extends Component {
             <div id="myModal" className="modal">
                <div className="modal-content">
                   <span className="close">&times;</span>
-                  <h1>{this.state.gameState.gameResult ? "Zwycięstwo" : "Porażka"}</h1>
+                  <h1>{this.state.gameResult ? "Zwycięstwo" : "Porażka"}</h1>
                </div>
             </div>
             <div className="main-wrapper justify-content-center">
                <div className="row justify-content-center">
                   <div className="col-8">
-                     <GameBoard ws={this.ws} {...this.state} />
+                     <GameBoard ws={this.state.ws} {...this.state} handlePieceClick={this.handlePieceClick} />
                   </div>
                   <div className="col-4">
-                     <GameUI
-                        handleResign={this.handleResign}
-                        gameState={this.state.gameState}
-                        clockInfo={this.state.clockInfo}
-                        gameInfo={this.state.gameUI}
-                        loading={this.state.loading}
-                        loaded={this.state.loaded}
-                        ws={this.ws}
-                     />
+                     <GameUI ws={this.state.ws} {...this.state} />
                   </div>
                </div>
             </div>
@@ -196,27 +223,90 @@ class CheckersRoomPage extends Component {
       );
    }
 
-   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ WEB SOCKET @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-   connect = () => {
-      // console.log("ROOM: connect was called");
-      this.ws = new WebSocket("ws://localhost:8080/CheckersSpring_war_exploded/game/" + this.state.userId);
-   };
-
    handleResign = () => {
       console.log("resigned");
-      let gameState = this.state.gameState;
-      gameState.gameEnded = true;
-      this.setState({ gameState: gameState });
+      this.setState({ gameEnded: true });
 
       var json = JSON.stringify({
          gameId: this.state.gameId,
          userId: this.state.userId,
          userToken: this.state.token,
-         myColor: this.state.gameState.myColor,
+         myColor: this.state.myColor,
          type: "resign"
       });
-      this.ws.send(json);
+      this.state.ws.send(json);
    };
+
+   //TODO dodac remis, sprawdzic adres api, sprawdzic logike
+   handleResult = result => {
+      var modal = document.getElementById("myModal");
+      var span = document.getElementsByClassName("close")[0];
+      modal.style.display = "block";
+      span.onclick = function() {
+         modal.style.display = "none";
+      };
+      window.onclick = function(event) {
+         if (event.target === modal) {
+            modal.style.display = "none";
+         }
+      };
+      var bearer = "Bearer " + this.state.token;
+      var url;
+      if (result === 1 && this.state.myColor === 0) {
+         url = "https://localhost:44316/api/Game/Win";
+      } else {
+         url = "https://localhost:44316/api/Game/Lose";
+      }
+      fetch(url, {
+         method: "GET",
+         withCredentials: true,
+         credentials: "include",
+         headers: {
+            "Content-Type": "application/json",
+            Authorization: bearer
+         }
+      })
+         .then(response => response.json())
+         .then(json => {
+            console.log(json);
+         })
+         .catch(error => console.error("Error:", error));
+   };
+
+   handlePieceClick(e) {
+      console.log("CHECKERS: handlePieceClick");
+      let rowIndex = parseInt(e.target.attributes["data-row"].nodeValue);
+      let cellIndex = parseInt(e.target.attributes["data-cell"].nodeValue);
+      if (this.state.board[rowIndex][cellIndex].indexOf(this.state.activePlayer) > -1) {
+         console.log("CHECKERS: calling sendPieceClick");
+         this.sendPieceClick(cellIndex, rowIndex);
+      } else {
+         console.log("CHECKERS ERROR: nie twoj kolor/ruch ALE WYSLALEM I TAK");
+         this.sendPieceClick(cellIndex, rowIndex);
+      }
+      var state = this.state;
+      if (this.state.board[rowIndex][cellIndex].indexOf(this.state.activePlayer) > -1) {
+         //this is triggered if the piece that was clicked on is one of the player's own pieces, it activates it and highlights possible moves
+
+         state.board[rowIndex][cellIndex] = "a" + this.state.board[rowIndex][cellIndex];
+         //this.highlightPossibleMoves(rowIndex, cellIndex);
+         state.prevCellIndex = cellIndex;
+         state.prevRowIndex = rowIndex;
+      } else if (this.state.board[rowIndex][cellIndex].indexOf("h") > -1) {
+         //this is activated if the piece clicked is a highlighted square, it moves the active piece to that spot.
+         //state.board = this.executeMove(rowIndex, cellIndex, this.state.board, this.state.activePlayer);
+         this.sendMove(this.state.prevCellIndex, this.state.prevRowIndex, cellIndex, rowIndex);
+         //is the game over? if not, swap active player
+         this.setState(this.state);
+
+         state.activePlayer = this.state.activePlayer === "r" ? "b" : "r";
+      }
+      this.setState(state);
+   }
+
+   componentWillUnmount() {
+      clearInterval(this.state.interval);
+   }
 }
 
 export default WithWebSocket(CheckersRoomPage);
