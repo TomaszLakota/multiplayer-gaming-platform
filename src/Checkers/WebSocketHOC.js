@@ -15,23 +15,32 @@ export default function WithWebSocket(WrappedComponent) {
          // console.log("WITHWEBSOCKET: this.state, this.props");
          // console.log(this.state);
          // console.log(this.props);
-         if (this.props.ws.readyState !== WebSocket.OPEN) {
+         if (this.state.ws === undefined && this.props.ws === undefined) {
+            console.log("WITHWEBSOCKET: this.state.ws === undefined && this.props.ws === undefined");
+            return 0;
+         }
+         if (this.state.ws === undefined) {
+            var state = { ws: this.props.ws, gameId: this.props.gameId, userId: this.props.userId };
+         }
+         if (this.props.ws === undefined) {
+            state = { ws: this.state.ws, gameId: this.state.gameId, userId: this.state.userId };
+         }
+
+         if (state.ws.readyState !== WebSocket.OPEN) {
             console.log("WITHWEBSOCKET: send() ws not ready");
             return 0;
          }
          var json = JSON.stringify({
-            gameId: this.props.gameId,
-            userId: this.props.userId,
+            gameId: state.gameId,
+            userId: state.userId,
             message: message,
             type: typeString,
             start: true
          });
-         // console.log("WITHWEBSOCKET: this.state, this.props.ws");
-         // console.log(this.state);
-         // console.log(this.props.ws);
+
          console.log("WITHWEBSOCKET: calling ws.send(): with json = ");
          console.log(json);
-         this.props.ws.send(json);
+         state.ws.send(json);
       }
 
       render() {

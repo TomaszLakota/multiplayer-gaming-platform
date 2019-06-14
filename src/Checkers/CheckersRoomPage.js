@@ -42,6 +42,11 @@ class CheckersRoomPage extends Component {
             ["-", "r", "-", "r", "-", "r", "-", "r"],
             ["r", "-", "r", "-", "r", "-", "r", "-"]
          ],
+         activePlayer: "r",
+         count: 0,
+         popShown: false,
+         prevRowIndex: null,
+         prevCellIndex: null,
          fetchStateUpdated1: false,
          fetchStateUpdated2: false,
          ws: null,
@@ -105,6 +110,12 @@ class CheckersRoomPage extends Component {
             ws: ws,
             didntUpdateYet: false
          });
+
+         setTimeout(() => {
+            console.log("!@#!@#!@#!@#");
+            console.log(this.send);
+            console.log(this.state.ws);
+         }, 1000);
       }
    }
 
@@ -274,23 +285,21 @@ class CheckersRoomPage extends Component {
          .catch(error => console.error("Error:", error));
    };
 
-   handlePieceClick(e) {
+   handlePieceClick = e => {
       console.log("CHECKERS: handlePieceClick");
+      console.log(this.state);
+      console.log(this.props);
       let rowIndex = parseInt(e.target.attributes["data-row"].nodeValue);
       let cellIndex = parseInt(e.target.attributes["data-cell"].nodeValue);
-      if (this.state.board[rowIndex][cellIndex].indexOf(this.state.activePlayer) > -1) {
-         console.log("CHECKERS: calling sendPieceClick");
-         this.sendPieceClick(cellIndex, rowIndex);
-      } else {
-         console.log("CHECKERS ERROR: nie twoj kolor/ruch ALE WYSLALEM I TAK");
-         this.sendPieceClick(cellIndex, rowIndex);
-      }
+
+      console.log("CHECKERS: calling sendPieceClick");
+      this.sendPieceClick(cellIndex, rowIndex);
+
       var state = this.state;
       if (this.state.board[rowIndex][cellIndex].indexOf(this.state.activePlayer) > -1) {
          //this is triggered if the piece that was clicked on is one of the player's own pieces, it activates it and highlights possible moves
-
-         state.board[rowIndex][cellIndex] = "a" + this.state.board[rowIndex][cellIndex];
-         //this.highlightPossibleMoves(rowIndex, cellIndex);
+         // state.board[rowIndex][cellIndex] = "a" + this.state.board[rowIndex][cellIndex];
+         // //this.highlightPossibleMoves(rowIndex, cellIndex);
          state.prevCellIndex = cellIndex;
          state.prevRowIndex = rowIndex;
       } else if (this.state.board[rowIndex][cellIndex].indexOf("h") > -1) {
@@ -298,16 +307,39 @@ class CheckersRoomPage extends Component {
          //state.board = this.executeMove(rowIndex, cellIndex, this.state.board, this.state.activePlayer);
          this.sendMove(this.state.prevCellIndex, this.state.prevRowIndex, cellIndex, rowIndex);
          //is the game over? if not, swap active player
-         this.setState(this.state);
+         // this.setState(this.state);
 
          state.activePlayer = this.state.activePlayer === "r" ? "b" : "r";
       }
       this.setState(state);
-   }
+   };
 
    componentWillUnmount() {
       clearInterval(this.state.interval);
    }
+
+   //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ SEND DATA @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+   convertColumnIndexToLetter = c => {
+      return (c + 10).toString(36).toUpperCase();
+   };
+
+   sendMove = (a, b, c, d) => {
+      console.log("sendMove called");
+      var a1 = this.convertColumnIndexToLetter(a);
+      var a2 = this.convertColumnIndexToLetter(c);
+
+      let state = this.state.gameState;
+      state.currentPlayer = (state.currentPlayer + 1) % 2;
+      state.gameStarted = true;
+      this.setState({ gameState: state });
+      this.send(a1 + (8 - b) + "-" + a2 + (8 - d), "move");
+   };
+
+   sendPieceClick = (a, b) => {
+      console.log("sendPieceClick called");
+      var a1 = this.convertColumnIndexToLetter(a);
+      this.send(a1 + (8 - b), "piece-click");
+   };
 }
 
 export default WithWebSocket(CheckersRoomPage);
