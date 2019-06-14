@@ -141,8 +141,8 @@ class CheckersRoomPage extends Component {
       })
          .then(response => response.json())
          .then(response => {
-            console.log("ROOM: settings response");
-            console.log(response);
+            // console.log("ROOM: settings response");
+            // console.log(response);
             let color;
             if (response.player1Id === response.myId) {
                color = 0;

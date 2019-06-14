@@ -9,23 +9,26 @@ export default function WithWebSocket(WrappedComponent) {
       };
 
       send(message, typeString) {
-         console.log("WITHWEBSOCKET: called send() with arguments:");
-         console.log(message);
-         console.log(typeString);
+         console.log("WITHWEBSOCKET: called send():");
+         // console.log(message);
+         // console.log(typeString);
+         // console.log("WITHWEBSOCKET: this.state, this.props");
+         // console.log(this.state);
+         // console.log(this.props);
          if (this.props.ws.readyState !== WebSocket.OPEN) {
             console.log("WITHWEBSOCKET: send() ws not ready");
             return 0;
          }
          var json = JSON.stringify({
-            gameId: this.state.gameId,
-            userId: this.state.userId,
+            gameId: this.props.gameId,
+            userId: this.props.userId,
             message: message,
             type: typeString,
             start: true
          });
-         console.log("WITHWEBSOCKET: this.state, this.props.ws");
-         console.log(this.state);
-         console.log(this.props.ws);
+         // console.log("WITHWEBSOCKET: this.state, this.props.ws");
+         // console.log(this.state);
+         // console.log(this.props.ws);
          console.log("WITHWEBSOCKET: calling ws.send(): with json = ");
          console.log(json);
          this.props.ws.send(json);

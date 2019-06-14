@@ -44,8 +44,8 @@ class GameUI extends Component {
                   <div className="h5 GUI_name col">{this.props.playerName2 ? this.props.playerName2 : ""}</div>
                </div>
                <div className="row text-center w-100 GUI_clocks">
-                  <ChessClock ws={this.props.ws} clockInfo={this.props} gameState={this.props} clockID={0} key="clock1" />
-                  <ChessClock ws={this.props.ws} clockInfo={this.props} gameState={this.props} clockID={1} key="clock2" />
+                  <ChessClock ws={this.props.ws} clockInfo={this.props} gameState={this.props} clockID={0} key="clock1" {...this.props} />
+                  <ChessClock ws={this.props.ws} clockInfo={this.props} gameState={this.props} clockID={1} key="clock2" {...this.props} />
                </div>
                <div className="GUI_buttons row w-100">
                   <div className="col-4">
@@ -66,7 +66,7 @@ class GameUI extends Component {
                </div>
             </div>
             <div className="row align-items-end">
-               <Chat ws={this.props.ws} username={this.props.playerName1} />
+               <Chat ws={this.props.ws} username={this.props.playerName1} {...this.props} />
                {/* TODO fix username above to real data */}
             </div>
          </div>
