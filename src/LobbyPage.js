@@ -30,10 +30,6 @@ class CheckersLobbyPage extends Component {
    componentWillUnmount() {
       this._isMounted = false;
    }
-
-   componentDidMount() {
-      // console.log("(@*#&$()_*@#$)_@_#)$*_)@#$_)@#" + this._isMounted + this.props._isMounted);
-   }
 }
 
 export default Authorized(CheckersLobbyPage);

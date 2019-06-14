@@ -17,28 +17,9 @@ class Chat extends Component {
       this.ws = this.props.ws;
    }
 
-   //THIS IS NOT CALLED ANYWHERE
-   // initSocket() {
-   //    this.ws.onmessage = event => {
-   //       console.log("CHAT: onmessage triggered");
-
-   //       if (event.data.type === "chat-message") {
-   //          this.setState({
-   //             messages: this.state.messages.push({
-   //                username: event.data.username,
-   //                message: event.data.message
-   //             })
-   //          });
-   //       }
-   //    };
-   // }
-
    handleSend = () => {
-      console.log("###########################");
-      console.log(this.state);
-      console.log(this.props);
       let message = {
-         username: this.props.username, //TODO: make sure its using real data
+         username: this.props.username,
          message: this.state.message
       };
       this.send(JSON.stringify(message), "message");

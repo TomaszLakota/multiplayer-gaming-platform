@@ -43,7 +43,7 @@ class GameBoard extends Component {
       this.ws = this.props.ws;
 
       setTimeout(() => {
-         console.log("CHECKERS: props and ws after 2s ########################################################");
+         console.log("CHECKERS: props and ws after 2s");
          console.log(this.props);
          console.log(this.props.ws);
       }, 2000);

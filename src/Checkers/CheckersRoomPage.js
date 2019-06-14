@@ -201,7 +201,7 @@ class CheckersRoomPage extends Component {
       })
          .then(response => response.json())
          .then(json => {
-            console.log("response manage ##############################");
+            console.log("response manage");
             console.log(json);
             this.setState({ fetchStateUpdated2: true });
          })

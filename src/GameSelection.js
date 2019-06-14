@@ -10,7 +10,6 @@ class GameSelection extends Component {
    render() {
       return (
          <React.Fragment>
-            {/* <h2>Wybór gry</h2> */}
             <div className="row">
                <ImageWithCaptionSmall image={checkers} caption={"Warcaby"} link={"/checkers"} />
                <ImageWithCaptionSmall image={cards} caption={"Brydż"} link={null} />

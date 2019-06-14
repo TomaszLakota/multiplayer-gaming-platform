@@ -48,11 +48,6 @@ class SignUpForm extends Component {
          localStorage.setItem("loggedIn", true);
          this.setState({ token: json.token, redirect: true });
       }
-      // if (json.status === 102) {
-      //    this.setState({ token: null, passwordErrorMessage: "Błędne hasło" });
-      //    localStorage.setItem("authToken", null);
-      //    localStorage.setItem("loggedIn", false);
-      // }
       if (json.status === 101) {
          this.setState({ token: null, loginErrorMessage: "Login zajęty" });
          localStorage.setItem("authToken", null);

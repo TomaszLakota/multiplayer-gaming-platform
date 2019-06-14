@@ -21,10 +21,6 @@ class Navbar extends Component {
    }
 
    render() {
-      // console.log("navbar render");
-      // console.log(this.props.loggedIn);
-      // console.log(this.state);
-
       const loggedInButtons = (
          <React.Fragment>
             <Link className="link" to="/logout">
