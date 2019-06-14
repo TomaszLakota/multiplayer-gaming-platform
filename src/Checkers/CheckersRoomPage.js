@@ -18,7 +18,6 @@ class CheckersRoomPage extends Component {
          loggedIn: false,
          loaded: false,
          isLoaded: false,
-         myUserId: null,
          gameId: gameId,
          currentPlayer: 0,
          myColor: 0,
@@ -142,6 +141,8 @@ class CheckersRoomPage extends Component {
       })
          .then(response => response.json())
          .then(response => {
+            console.log("ROOM: settings response");
+            console.log(response);
             let color;
             if (response.player1Id === response.myId) {
                color = 0;
@@ -158,7 +159,7 @@ class CheckersRoomPage extends Component {
                gameName: response.settings.gameName,
                userID1: response.user1id,
                userID2: response.user2id,
-               myUserId: response.settings.yourId,
+               userId: response.myId,
                myColor: color
             });
          })

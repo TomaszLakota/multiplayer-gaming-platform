@@ -79,6 +79,7 @@ class GameBoard extends Component {
          console.log("CHECKERS: props and ws after 2s ########################################################");
          console.log(this.props);
          console.log(this.props.ws);
+         console.log(this.props.ws.onmessage);
       }, 2000);
    }
 
