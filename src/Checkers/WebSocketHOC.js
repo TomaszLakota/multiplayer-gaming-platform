@@ -20,7 +20,8 @@ export default function WithWebSocket(WrappedComponent) {
             gameId: this.state.gameId,
             userId: this.state.userId,
             message: message,
-            type: typeString
+            type: typeString,
+            start: true
          });
          console.log("WITHWEBSOCKET: this.state, this.props.ws");
          console.log(this.state);
